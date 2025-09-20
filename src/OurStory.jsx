@@ -26,7 +26,7 @@ function OurStory() {
     <div className="min-h-screen flex flex-col items-center justify-center py-4 bg-[#f4f4f4]">
       <h1
         style={{ fontFamily: "'Bodoni Moda', serif" }}
-        className="text-center text-2xl sm:text-2xl md:text-5xl md:mt-24 font-thin tracking-normal"
+        className="text-center text-2xl sm:text-2xl md:text-5xl mt-24 font-thin tracking-normal"
       >
         How it all began
       </h1>
@@ -40,7 +40,7 @@ function OurStory() {
       {/* Quotes Section */}
       <div className="w-full flex flex-col gap-16 mt-12 px-4 sm:px-6 lg:px-24">
         <blockquote
-          className="max-w-2xl text-left text-lg md:text-2xl font-normal md:mt-20 md:ml-24"
+          className="max-w-2xl text-left text-lg md:text-2xl font-normal md:mt-10 md:ml-24"
           style={{ fontFamily: "'Bodoni Moda', serif" }}
         >
           “I saw her across the bar and I couldn’t look away until I had the guts to talk to her.”

@@ -5,6 +5,7 @@ function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const textColor = isHome ? "text-white hover:text-pink-600" : "text-black hover:text-pink-600";
+  const mobileLinkColor = "text-black hover:text-pink-600";
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -28,7 +29,7 @@ function Navbar() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 w-full ${isHome ? "bg-pink" : "bg-white"} shadow-md z-50`}>
+    <nav className={`fixed top-0 left-0 w-full z-50 shadow-md ${isHome ? "bg-transparent" : "bg-white"}`}>
       <div className="mx-4 sm:mx-10 flex justify-between items-center py-4">
         <div className={`text-2xl font-bold ${isHome ? "text-white" : "text-black"}`}>
           #ViPattykiShaadi
@@ -51,42 +52,47 @@ function Navbar() {
         </button>
         {/* Links */}
         <ul
-          className={`flex flex-col sm:flex-row gap-6 sm:gap-9 absolute sm:static top-full left-0 w-full sm:w-auto bg-white sm:bg-transparent p-6 sm:p-0 shadow-md sm:shadow-none transition-transform transform ${
-            menuOpen ? "translate-y-0" : "-translate-y-full"
-          } sm:translate-y-0 sm:flex`}
+          className={`
+            flex flex-col sm:flex-row gap-6 sm:gap-9
+            absolute sm:static top-full left-0 w-full sm:w-auto
+            ${menuOpen ? "bg-white p-6 rounded-b-lg shadow-lg" : "bg-transparent p-0"}
+            transition-transform duration-300 ease-in-out
+            transform ${menuOpen ? "translate-y-0" : "-translate-y-full"} sm:translate-y-0
+            ${menuOpen ? "" : "hidden sm:flex"}
+          `}
         >
           <li>
-            <Link to="/" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Home
             </Link>
           </li>
           <li>
-            <Link to="/our-story" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/our-story" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Our Story
             </Link>
           </li>
           <li>
-            <Link to="/gallery" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/gallery" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Gallery
             </Link>
           </li>
           <li>
-            <Link to="/itinerary" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/itinerary" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Itinerary
             </Link>
           </li>
           <li>
-            <a href="/#rsvp" onClick={scrollToRSVP} className={textColor}>
+            <a href="/#rsvp" onClick={scrollToRSVP} className={menuOpen ? mobileLinkColor : textColor}>
               RSVP
             </a>
           </li>
           <li>
-            <Link to="/outfit-moodboard" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/outfit-moodboard" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Outfit Moodboard
             </Link>
           </li>
           <li>
-            <Link to="/contact" className={textColor} onClick={() => setMenuOpen(false)}>
+            <Link to="/contact" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
               Contact
             </Link>
           </li>

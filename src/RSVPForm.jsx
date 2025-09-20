@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import bgImage from "./assets/image2.jpeg";
+import React, { useState, useEffect } from "react";
+import bgImage from "./assets/image2.jpeg"; // Desktop form background
+import mobileBgImage from "./assets/mobile.jpeg"; // Mobile form background
 
 const COUNTRY_CODES = [
   { code: "+91", label: "India" },
@@ -28,6 +29,26 @@ function RSVPForm() {
   const [arrivalFlightNo, setArrivalFlightNo] = useState("");
   const [departureFlightNo, setDepartureFlightNo] = useState("");
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    // Preload both images
+    const desktopImg = new window.Image();
+    desktopImg.src = bgImage;
+    const mobileImg = new window.Image();
+    mobileImg.src = mobileBgImage;
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleContactChange = (e) => {
     const val = e.target.value;
     setContact(val);
@@ -39,70 +60,72 @@ function RSVPForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (contactError) return;
-
-    const formData = {
-      name,
-      countryCode,
-      contact,
-      response,
-      numberofPeople: numPeople,
-      arrivalDate,
-      arrivalTime,
-      departureDate,
-      departureTime,
-      transportMode,
-      Address: localAddress,
-      needTransport,
-      arrivalTrainNo,
-      departureTrainNo,
-      arrivalFlightNo,
-      departureFlightNo,
-    };
-
-    try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec",
-        {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: { "Content-Type": "application/json" },
+      e.preventDefault();
+      if (contactError) return;
+  
+      const formData = {
+        name,
+        countryCode,
+        contact,
+        response,
+        numberofPeople: numPeople,
+        arrivalDate,
+        arrivalTime,
+        departureDate,
+        departureTime,
+        transportMode,
+        Address: localAddress,
+        needTransport,
+        arrivalTrainNo,
+        departureTrainNo,
+        arrivalFlightNo,
+        departureFlightNo,
+      };
+  
+      try {
+        const res = await fetch(
+          "https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec",
+          {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+  
+        if (res.ok) {
+          alert("RSVP submitted successfully!");
+          setName("");
+          setContact("");
+          setResponse("");
+          setNumPeople("");
+          setArrivalDate("");
+          setArrivalTime("");
+          setDepartureDate("");
+          setDepartureTime("");
+          setTransportMode("");
+          setLocalAddress("");
+          setNeedTransport("");
+          setArrivalTrainNo("");
+          setDepartureTrainNo("");
+          setArrivalFlightNo("");
+          setDepartureFlightNo("");
+        } else {
+          alert("Something went wrong!");
         }
-      );
-
-      if (res.ok) {
-        alert("RSVP submitted successfully!");
-        setName("");
-        setContact("");
-        setResponse("");
-        setNumPeople("");
-        setArrivalDate("");
-        setArrivalTime("");
-        setDepartureDate("");
-        setDepartureTime("");
-        setTransportMode("");
-        setLocalAddress("");
-        setNeedTransport("");
-        setArrivalTrainNo("");
-        setDepartureTrainNo("");
-        setArrivalFlightNo("");
-        setDepartureFlightNo("");
-      } else {
-        alert("Something went wrong!");
+      } catch (err) {
+        console.error(err);
+        alert("Error submitting RSVP");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Error submitting RSVP");
-    }
-  };
+    };
 
   return (
     <div
-      className="w-full sm:w-[550px] mx-auto pt-14 pb-16 px-8 text-center rounded-t-full shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10"
+      className={`w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out ${
+        response ? "py-16" : "py-14"
+      }`}
       style={{
-        minHeight: "730px",
-        backgroundImage: `url(${bgImage})`,
+        minHeight: isMobile ? (response ? "730px" : "600px") : "730px",
+        backgroundImage: `url(${isMobile ? mobileBgImage : bgImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -118,10 +141,10 @@ function RSVPForm() {
           RSVP
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex justify-center gap-6 mb-12">
           <button
             onClick={() => setResponse("yes")}
-            className={`px-8 py-2 rounded-xl transition font-serif text-base shadow ${
+            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow ${
               response === "yes"
                 ? "bg-black text-white"
                 : "bg-white text-black border border-black"
@@ -131,7 +154,7 @@ function RSVPForm() {
           </button>
           <button
             onClick={() => setResponse("no")}
-            className={`px-8 py-2 rounded-xl transition font-serif text-base shadow ${
+            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow ${
               response === "no"
                 ? "bg-black text-white"
                 : "bg-white text-black border border-black"
