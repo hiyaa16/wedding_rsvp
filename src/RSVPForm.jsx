@@ -118,7 +118,7 @@ function RSVPForm() {
           RSVP
         </h2>
 
-        <div className="flex justify-center gap-6 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
           <button
             onClick={() => setResponse("yes")}
             className={`px-8 py-2 rounded-xl transition font-serif text-base shadow ${
@@ -152,9 +152,9 @@ function RSVPForm() {
               className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
             />
 
-            <div className="flex space-x-2 items-center">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center">
               <select
-                className="p-3 rounded-l-full font-serif bg-white bg-opacity-90 shadow border border-r-0 border-gray-300 focus:border-black focus:outline-none"
+                className="w-full sm:w-auto p-3 rounded-full sm:rounded-l-full sm:rounded-r-none font-serif bg-white bg-opacity-90 shadow border sm:border-r-0 border-gray-300 focus:border-black focus:outline-none"
                 value={countryCode}
                 onChange={(e) => setCountryCode(e.target.value)}
                 required
@@ -173,7 +173,7 @@ function RSVPForm() {
                 value={contact}
                 onChange={handleContactChange}
                 required
-                className="flex-1 p-3 rounded-r-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                className="flex-1 w-full p-3 rounded-full sm:rounded-r-full sm:rounded-l-none font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
               />
             </div>
             {contactError && (
@@ -203,14 +203,14 @@ function RSVPForm() {
                     value={arrivalDate}
                     onChange={(e) => setArrivalDate(e.target.value)}
                     required
-                    className="flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   />
                   <input
                     type="time"
                     value={arrivalTime}
                     onChange={(e) => setArrivalTime(e.target.value)}
                     required
-                    className="flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   />
                 </div>
 
@@ -223,14 +223,14 @@ function RSVPForm() {
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
                     required
-                    className="flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   />
                   <input
                     type="time"
                     value={departureTime}
                     onChange={(e) => setDepartureTime(e.target.value)}
                     required
-                    className="flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   />
                 </div>
 
@@ -299,7 +299,7 @@ function RSVPForm() {
                   />
                 )}
 
-                <div className="flex gap-6 items-center justify-center mt-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4">
                   <label className="font-serif text-black">
                     Need transportation?
                   </label>
