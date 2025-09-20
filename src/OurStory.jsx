@@ -34,7 +34,7 @@ function OurStory() {
       <img
         src={storyImg}
         alt="Our Story"
-        className="w-full mt-14 md:max-w-7xl sm:max-w-sm"
+        className="w-full mt-14 px-10 md:max-w-7xl sm:max-w-sm"
       />
 
       {/* Quotes Section */}
