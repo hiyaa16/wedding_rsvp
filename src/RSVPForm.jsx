@@ -34,43 +34,38 @@ function RSVPForm() {
     }
   };
 
-  // ✅ handle submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (contactError) return;
 
     const formData = {
-     
       name,
       countryCode,
       contact,
       response,
-      numberofPeople,
+      numberofPeople: numPeople,
       arrivalDate,
       arrivalTime,
       departureDate,
       departureTime,
       transportMode,
-      Address,
+      Address: localAddress,
       needTransport,
     };
 
     try {
       const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbxQyeyXjWg-4Z827pG9gWBOupk-GDVt352-e5eqf6i6Can5Kgk2m4eocxPXsajFbSf3/exec", // 👈 apna Web App URL paste karo
+        "https://script.google.com/macros/s/AKfycbxQyeyXjWg-4Z827pG9gWBOupk-GDVt352-e5eqf6i6Can5Kgk2m4eocxPXsajFbSf3/exec",
         {
           method: "POST",
           body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
       if (res.ok) {
         alert("RSVP submitted successfully!");
         // reset fields
-        
         setName("");
         setContact("");
         setResponse("");
@@ -80,11 +75,9 @@ function RSVPForm() {
         setDepartureDate("");
         setDepartureTime("");
         setTransportMode("");
-        setAddress("");
+        setLocalAddress("");
         setNeedTransport("");
-      } else {
-        alert("Something went wrong!");
-      }
+      } else alert("Something went wrong!");
     } catch (err) {
       console.error(err);
       alert("Error submitting RSVP");
@@ -93,7 +86,7 @@ function RSVPForm() {
 
   return (
     <div
-      className="w-[550px] mx-auto pt-14 pb-16 px-8 text-center rounded-t-full shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10"
+      className="w-full max-w-[550px] mx-auto pt-14 pb-16 px-6 sm:px-8 text-center rounded-t-full shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10"
       style={{
         minHeight: "730px",
         backgroundImage: `url(${bgImage})`,
@@ -102,23 +95,18 @@ function RSVPForm() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-opacity-10 rounded-t-full"></div>
+      <div className="absolute inset-0 bg-black/10 rounded-t-full"></div>
 
       <div className="relative z-10 w-full">
-        <h2
-          className="text-4xl mb-8 font-bold tracking-wide text-black drop-shadow-lg"
-          style={{ fontFamily: "serif" }}
-        >
+        <h2 className="text-4xl mb-8 font-bold tracking-wide text-black drop-shadow-lg" style={{ fontFamily: "serif" }}>
           RSVP
         </h2>
 
-        <div className="flex justify-center gap-6 mb-12">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-12">
           <button
             onClick={() => setResponse("yes")}
             className={`px-8 py-2 rounded-xl transition font-serif text-base shadow ${
-              response === "yes"
-                ? "bg-black text-white"
-                : "bg-white text-black border border-black"
+              response === "yes" ? "bg-black text-white" : "bg-white text-black border border-black"
             }`}
           >
             Accept
@@ -126,9 +114,7 @@ function RSVPForm() {
           <button
             onClick={() => setResponse("no")}
             className={`px-8 py-2 rounded-xl transition font-serif text-base shadow ${
-              response === "no"
-                ? "bg-black text-white"
-                : "bg-white text-black border border-black"
+              response === "no" ? "bg-black text-white" : "bg-white text-black border border-black"
             }`}
           >
             Decline
@@ -146,7 +132,7 @@ function RSVPForm() {
               className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
             />
 
-            <div className="flex space-x-2 items-center">
+            <div className="flex flex-col sm:flex-row gap-2">
               <select
                 className="p-3 rounded-l-full font-serif bg-white bg-opacity-90 shadow border border-r-0 border-gray-300 focus:border-black focus:outline-none"
                 value={countryCode}
@@ -171,9 +157,7 @@ function RSVPForm() {
               />
             </div>
             {contactError && (
-              <div className="text-red-500 text-left ml-2 text-sm">
-                {contactError}
-              </div>
+              <div className="text-red-500 text-left ml-2 text-sm">{contactError}</div>
             )}
 
             {response === "yes" && (
@@ -191,7 +175,7 @@ function RSVPForm() {
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
                   Enter arrival date and time
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="date"
                     value={arrivalDate}
@@ -211,7 +195,7 @@ function RSVPForm() {
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
                   Enter departure date and time
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="date"
                     value={departureDate}
@@ -251,10 +235,8 @@ function RSVPForm() {
                   />
                 )}
 
-                <div className="flex gap-6 items-center justify-center">
-                  <label className="font-serif text-black">
-                    Need transportation?
-                  </label>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                  <label className="font-serif text-black">Need transportation?</label>
                   <label className="flex items-center space-x-1">
                     <input
                       type="radio"
@@ -279,10 +261,10 @@ function RSVPForm() {
               </>
             )}
 
-            <button
+                        <button
               type="submit"
               disabled={!!contactError}
-              className="w-40 mt-4 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-700 disabled:opacity-50"
+              className="w-full sm:w-40 mt-4 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-700 disabled:opacity-50"
             >
               Submit
             </button>
@@ -294,3 +276,4 @@ function RSVPForm() {
 }
 
 export default RSVPForm;
+

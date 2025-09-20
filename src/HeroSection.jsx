@@ -8,7 +8,6 @@ function HeroSection() {
   const images = [img1, img2, img3];
   const [current, setCurrent] = useState(0);
 
-  // Auto-change background every 3s
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
@@ -35,18 +34,21 @@ function HeroSection() {
       <div className="absolute inset-0 bg-black/70"></div>
 
       {/* Fixed Content */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center text-white">
+      <div className="relative h-full flex flex-col items-center justify-center text-center text-white px-4 sm:px-0">
         <h1 className="text-3xl md:text-6xl font-extrabold tracking-[.10em] mb-4">
           SAVE THE DATE
         </h1>
-        <div className="flex flex-col md:flex-row items-center justify-center w-full">
-          <div className="md:border-r-2 md:border-white pr-8 text-base md:text-lg opacity-90 font-light">
+
+        <div className="flex flex-col sm:flex-row items-center justify-center w-full">
+          <div className="sm:border-r-2 sm:border-white pr-0 sm:pr-8 text-base md:text-lg opacity-90 font-light mb-2 sm:mb-0">
             Indana<br />Jodhpur
           </div>
-          <div className="text-4xl md:text-3xl italic font-serif mx-6 opacity-100">
+
+          <div className="text-4xl md:text-3xl italic font-serif mx-0 sm:mx-6 opacity-100">
             Vipul & Patty
           </div>
-          <div className="md:border-l-2 md:border-white pl-8 md:pl-10 text-base md:text-lg opacity-90 font-light">
+
+          <div className="sm:border-l-2 sm:border-white pl-0 sm:pl-10 text-base md:text-lg opacity-90 font-light mt-2 sm:mt-0">
             20 & 21 February<br />2026
           </div>
         </div>
