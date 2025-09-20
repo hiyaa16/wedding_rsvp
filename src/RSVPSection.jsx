@@ -14,22 +14,18 @@ function RSVPSection() {
 
   return (
     <div className="relative w-full">
-      {/* Fixed Background */}
       <div
         ref={bgRef}
-        className="fixed top-0 left-0 w-full h-screen z-0"
-        style={{ backgroundImage: `url(${bgImage})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "contain" }} // <-- contain for mobile
+        className="fixed top-0 left-0 w-full h-screen bg-cover bg-center z-0"
+        style={{ backgroundImage: `url(${bgImage})` }}
       >
-        {/* Overlay only for desktop */}
-        <div className="hidden sm:block absolute inset-0 bg-black/70"></div>
+        <div className="absolute inset-0 bg-black/70"></div>
       </div>
 
-      {/* Spacer to push RSVP below HeroSection */}
       <div className="h-screen"></div>
 
-      {/* RSVP Form Section */}
       <section id="rsvp" className="relative z-10 flex items-center justify-center min-h-screen px-4">
-        <div className="max-w-lg w-full text-center p-4 sm:p-8">
+        <div className="max-w-lg w-full text-center p-8">
           <RSVPForm />
         </div>
       </section>

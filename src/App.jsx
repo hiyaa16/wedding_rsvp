@@ -8,6 +8,7 @@ import Gallery from "./Gallery";
 import Itinerary from "./Itinerary";
 import Contact from "./Contact";
 import OutfitMoodboard from "./OutfitMoodboard";
+import MusicPlayer from "./MusicPlayer"; // ✅ Autoplay music
 
 function Home() {
   // Scroll to top on page load
@@ -26,6 +27,7 @@ function Home() {
 function App() {
   return (
     <Router>
+      <MusicPlayer /> {/* Autoplay music on all pages */}
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
