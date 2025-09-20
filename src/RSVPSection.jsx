@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import RSVPForm from "./RSVPForm";
 import bgImage from "./assets/image5.jpeg";
 
 function RSVPSection() {
+  const bgRef = useRef(null);
+
+  useEffect(() => {
+    const img = new window.Image();
+    img.src = bgImage;
+    img.onload = () => console.log("RSVP background image loaded:", bgImage);
+    img.onerror = () => console.error("Failed to load RSVP background image:", bgImage);
+  }, []);
+
   return (
-    <section
-      id="rsvp"
-      className="relative w-full min-h-screen flex items-center justify-center px-4"
-    >
-      {/* Fixed background */}
+    <div className="relative w-full">
+      {/* Fixed Background */}
       <div
-        className="fixed top-0 left-0 w-full h-full bg-cover bg-center z-0"
-        style={{ backgroundImage: `url(${bgImage})` }}
+        ref={bgRef}
+        className="fixed top-0 left-0 w-full h-screen z-0"
+        style={{ backgroundImage: `url(${bgImage})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "contain" }} // <-- contain for mobile
       >
-        <div className="absolute inset-0 bg-black/70"></div>
+        {/* Overlay only for desktop */}
+        <div className="hidden sm:block absolute inset-0 bg-black/70"></div>
       </div>
 
-      {/* RSVP Form */}
-      <div className="relative z-10 max-w-lg w-full text-center p-6 sm:p-8 rounded-lg bg-white/90 shadow-lg">
-        <RSVPForm />
-      </div>
-    </section>
+      {/* Spacer to push RSVP below HeroSection */}
+      <div className="h-screen"></div>
+
+      {/* RSVP Form Section */}
+      <section id="rsvp" className="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div className="max-w-lg w-full text-center p-4 sm:p-8">
+          <RSVPForm />
+        </div>
+      </section>
+    </div>
   );
 }
 
