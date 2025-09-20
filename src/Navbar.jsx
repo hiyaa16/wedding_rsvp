@@ -24,7 +24,7 @@ function Navbar() {
     <nav className={`fixed top-0 left-0 w-full ${isHome ? "bg-pink" : "bg-white"} shadow-md z-50`}>
       <div className="mx-10 flex justify-between items-center py-4">
         <div className={`text-2xl font-bold ${isHome ? "text-white" : "text-black"}`}>
-          #vpattykishaadi
+          #ViPattykiShaadi
         </div>
         <ul className="flex gap-9">
           <li><Link to="/" className={textColor}>Home</Link></li>

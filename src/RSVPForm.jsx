@@ -23,6 +23,10 @@ function RSVPForm() {
   const [departureDate, setDepartureDate] = useState("");
   const [departureTime, setDepartureTime] = useState("");
   const [localAddress, setLocalAddress] = useState("");
+  const [arrivalTrainNo, setArrivalTrainNo] = useState("");
+  const [departureTrainNo, setDepartureTrainNo] = useState("");
+  const [arrivalFlightNo, setArrivalFlightNo] = useState("");
+  const [departureFlightNo, setDepartureFlightNo] = useState("");
 
   const handleContactChange = (e) => {
     const val = e.target.value;
@@ -51,6 +55,10 @@ function RSVPForm() {
       transportMode,
       Address: localAddress,
       needTransport,
+      arrivalTrainNo,
+      departureTrainNo,
+      arrivalFlightNo,
+      departureFlightNo,
     };
 
     try {
@@ -76,6 +84,10 @@ function RSVPForm() {
         setTransportMode("");
         setLocalAddress("");
         setNeedTransport("");
+        setArrivalTrainNo("");
+        setDepartureTrainNo("");
+        setArrivalFlightNo("");
+        setDepartureFlightNo("");
       } else {
         alert("Something went wrong!");
       }
@@ -234,6 +246,48 @@ function RSVPForm() {
                   <option value="local">Local</option>
                 </select>
 
+                {transportMode === "railway" && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Arrival Train No."
+                      value={arrivalTrainNo}
+                      onChange={(e) => setArrivalTrainNo(e.target.value)}
+                      required
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Departure Train No."
+                      value={departureTrainNo}
+                      onChange={(e) => setDepartureTrainNo(e.target.value)}
+                      required
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
+                    />
+                  </>
+                )}
+
+                {transportMode === "airport" && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Arrival Flight No."
+                      value={arrivalFlightNo}
+                      onChange={(e) => setArrivalFlightNo(e.target.value)}
+                      required
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Departure Flight No."
+                      value={departureFlightNo}
+                      onChange={(e) => setDepartureFlightNo(e.target.value)}
+                      required
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
+                    />
+                  </>
+                )}
+
                 {transportMode === "local" && (
                   <input
                     type="text"
@@ -245,7 +299,7 @@ function RSVPForm() {
                   />
                 )}
 
-                                <div className="flex gap-6 items-center justify-center mt-4">
+                <div className="flex gap-6 items-center justify-center mt-4">
                   <label className="font-serif text-black">
                     Need transportation?
                   </label>
