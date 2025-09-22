@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "./assets/image2.jpeg"; // Desktop form background
-import mobileBgImage from "./assets/mobile.jpeg"; // Mobile form background
+import bgImage from "./assets/image2.jpeg"; // Desktop
+import mobileBgImage from "./assets/mobile.jpeg"; // Mobile
 
 const COUNTRY_CODES = [
   { code: "+91", label: "India" },
@@ -28,111 +28,106 @@ function RSVPForm() {
   const [departureTrainNo, setDepartureTrainNo] = useState("");
   const [arrivalFlightNo, setArrivalFlightNo] = useState("");
   const [departureFlightNo, setDepartureFlightNo] = useState("");
-
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    // Preload both images
     const desktopImg = new window.Image();
     desktopImg.src = bgImage;
     const mobileImg = new window.Image();
     mobileImg.src = mobileBgImage;
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleContactChange = (e) => {
     const val = e.target.value;
     setContact(val);
-    if (!/^\d{10}$/.test(val)) {
-      setContactError("Enter a valid 10-digit number");
-    } else {
-      setContactError("");
-    }
+    setContactError(/^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      if (contactError) return;
-  
-      const formData = {
-        name,
-        countryCode,
-        contact,
-        response,
-        numberofPeople: numPeople,
-        arrivalDate,
-        arrivalTime,
-        departureDate,
-        departureTime,
-        transportMode,
-        Address: localAddress,
-        needTransport,
-        arrivalTrainNo,
-        departureTrainNo,
-        arrivalFlightNo,
-        departureFlightNo,
-      };
-  
-      try {
-        const res = await fetch(
-          "https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec",
-          {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-  
-        if (res.ok) {
-          alert("RSVP submitted successfully!");
-          setName("");
-          setContact("");
-          setResponse("");
-          setNumPeople("");
-          setArrivalDate("");
-          setArrivalTime("");
-          setDepartureDate("");
-          setDepartureTime("");
-          setTransportMode("");
-          setLocalAddress("");
-          setNeedTransport("");
-          setArrivalTrainNo("");
-          setDepartureTrainNo("");
-          setArrivalFlightNo("");
-          setDepartureFlightNo("");
-        } else {
-          alert("Something went wrong!");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error submitting RSVP");
-      }
+    e.preventDefault();
+    if (contactError) return;
+
+    const formData = {
+      name,
+      countryCode,
+      contact,
+      response,
+      numberofPeople: numPeople,
+      arrivalDate,
+      arrivalTime,
+      departureDate,
+      departureTime,
+      transportMode,
+      Address: localAddress,
+      needTransport,
+      arrivalTrainNo,
+      departureTrainNo,
+      arrivalFlightNo,
+      departureFlightNo,
     };
+
+    try {
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbwVIhf6UgOP5y1fpt6gEB4Oq4Co957YpuryIJ_AcKLVMPzTo1xycJZoFglxIeUQz5mU/exec", // Replace with your deployed Apps Script URL
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (res.ok) {
+        setSubmitted(true);
+        // reset form
+        setName("");
+        setContact("");
+        setResponse("");
+        setNumPeople("");
+        setArrivalDate("");
+        setArrivalTime("");
+        setDepartureDate("");
+        setDepartureTime("");
+        setTransportMode("");
+        setLocalAddress("");
+        setNeedTransport("");
+        setArrivalTrainNo("");
+        setDepartureTrainNo("");
+        setArrivalFlightNo("");
+        setDepartureFlightNo("");
+      } else {
+        alert("Something went wrong!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(
+        "Error submitting RSVP. Make sure the Web App URL is correct and deployed as 'Anyone, even anonymous'."
+      );
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 rounded-t-full bg-white">
+        <h2 className="text-3xl font-bold">Thank you for your RSVP!</h2>
+      </div>
+    );
+  }
 
   return (
     <div
-      className={`w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out ${
-        response ? "py-16" : "py-14"
-      }`}
+      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out"
       style={{
-        minHeight: isMobile ? (response ? "730px" : "600px") : "730px",
+        minHeight: isMobile ? "600px" : "730px",
         backgroundImage: `url(${isMobile ? mobileBgImage : bgImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-transparent sm:bg-black/10 rounded-t-full"></div>
-
       <div className="relative z-10 w-full">
         <h2
           className="text-4xl mb-8 font-bold tracking-wide text-black drop-shadow-lg"
@@ -166,6 +161,7 @@ function RSVPForm() {
 
         {(response === "yes" || response === "no") && (
           <form className="w-full space-y-6" onSubmit={handleSubmit}>
+            {/* Name */}
             <input
               type="text"
               placeholder="Name"
@@ -175,6 +171,7 @@ function RSVPForm() {
               className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
             />
 
+            {/* Contact */}
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center">
               <select
                 className="w-full sm:w-auto p-3 rounded-full sm:rounded-l-full sm:rounded-r-none font-serif bg-white bg-opacity-90 shadow border sm:border-r-0 border-gray-300 focus:border-black focus:outline-none"
@@ -200,11 +197,10 @@ function RSVPForm() {
               />
             </div>
             {contactError && (
-              <div className="text-red-500 text-left ml-2 text-sm">
-                {contactError}
-              </div>
+              <div className="text-red-500 text-left ml-2 text-sm">{contactError}</div>
             )}
 
+            {/* YES Response Fields */}
             {response === "yes" && (
               <>
                 <input
@@ -217,6 +213,7 @@ function RSVPForm() {
                   className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                 />
 
+                {/* Arrival */}
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
                   Enter arrival date and time
                 </div>
@@ -237,6 +234,7 @@ function RSVPForm() {
                   />
                 </div>
 
+                {/* Departure */}
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
                   Enter departure date and time
                 </div>
@@ -257,6 +255,7 @@ function RSVPForm() {
                   />
                 </div>
 
+                {/* Transport Mode */}
                 <select
                   className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   value={transportMode}
@@ -269,6 +268,7 @@ function RSVPForm() {
                   <option value="local">Local</option>
                 </select>
 
+                {/* Railway */}
                 {transportMode === "railway" && (
                   <>
                     <input
@@ -290,6 +290,7 @@ function RSVPForm() {
                   </>
                 )}
 
+                {/* Airport */}
                 {transportMode === "airport" && (
                   <>
                     <input
@@ -311,6 +312,7 @@ function RSVPForm() {
                   </>
                 )}
 
+                {/* Local */}
                 {transportMode === "local" && (
                   <input
                     type="text"
@@ -322,10 +324,9 @@ function RSVPForm() {
                   />
                 )}
 
+                {/* Need Transport */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4">
-                  <label className="font-serif text-black">
-                    Need transportation?
-                  </label>
+                  <label className="font-serif text-black">Need transportation?</label>
                   <label className="flex items-center space-x-1">
                     <input
                       type="radio"
