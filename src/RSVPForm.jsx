@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "./assets/image2.jpeg"; // Desktop
-import mobileBgImage from "./assets/mobile.jpeg"; // Mobile
+import bgImage from "./assets/image2.jpeg";
+import mobileBgImage from "./assets/mobile.jpeg";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "./firebase"; // adjust path if needed
 
 const COUNTRY_CODES = [
   { code: "+91", label: "India" },
@@ -36,7 +38,6 @@ function RSVPForm() {
     desktopImg.src = bgImage;
     const mobileImg = new window.Image();
     mobileImg.src = mobileBgImage;
-
     const handleResize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -48,6 +49,7 @@ function RSVPForm() {
     setContactError(/^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
   };
 
+  // UPDATED Firestore submit logic
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (contactError) return;
@@ -72,41 +74,27 @@ function RSVPForm() {
     };
 
     try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbwVIhf6UgOP5y1fpt6gEB4Oq4Co957YpuryIJ_AcKLVMPzTo1xycJZoFglxIeUQz5mU/exec", // Replace with your deployed Apps Script URL
-        {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (res.ok) {
-        setSubmitted(true);
-        // reset form
-        setName("");
-        setContact("");
-        setResponse("");
-        setNumPeople("");
-        setArrivalDate("");
-        setArrivalTime("");
-        setDepartureDate("");
-        setDepartureTime("");
-        setTransportMode("");
-        setLocalAddress("");
-        setNeedTransport("");
-        setArrivalTrainNo("");
-        setDepartureTrainNo("");
-        setArrivalFlightNo("");
-        setDepartureFlightNo("");
-      } else {
-        alert("Something went wrong!");
-      }
+      // Submit to Firestore collection "rsvps"
+      await addDoc(collection(db, "rsvps"), formData);
+      setSubmitted(true);
+      setName("");
+      setContact("");
+      setResponse("");
+      setNumPeople("");
+      setArrivalDate("");
+      setArrivalTime("");
+      setDepartureDate("");
+      setDepartureTime("");
+      setTransportMode("");
+      setLocalAddress("");
+      setNeedTransport("");
+      setArrivalTrainNo("");
+      setDepartureTrainNo("");
+      setArrivalFlightNo("");
+      setDepartureFlightNo("");
     } catch (err) {
       console.error(err);
-      alert(
-        "Error submitting RSVP. Make sure the Web App URL is correct and deployed as 'Anyone, even anonymous'."
-      );
+      alert("Error saving RSVP. Please try again.");
     }
   };
 
