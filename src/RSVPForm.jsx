@@ -50,57 +50,71 @@ function RSVPForm() {
   };
 
   // UPDATED Firestore submit logic
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (contactError) return;
+  // UPDATED Firestore + Google Sheets submit logic
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (contactError) return;
 
-    const formData = {
-      name,
-      countryCode,
-      contact,
-      response,
-      numberofPeople: numPeople,
-      arrivalDate,
-      arrivalTime,
-      departureDate,
-      departureTime,
-      transportMode,
-      Address: localAddress,
-      needTransport,
-      arrivalTrainNo,
-      departureTrainNo,
-      arrivalFlightNo,
-      departureFlightNo,
-    };
-
-    try {
-      // Submit to Firestore collection "rsvps"
-      await addDoc(collection(db, "rsvps"), formData);
-      setSubmitted(true);
-      setName("");
-      setContact("");
-      setResponse("");
-      setNumPeople("");
-      setArrivalDate("");
-      setArrivalTime("");
-      setDepartureDate("");
-      setDepartureTime("");
-      setTransportMode("");
-      setLocalAddress("");
-      setNeedTransport("");
-      setArrivalTrainNo("");
-      setDepartureTrainNo("");
-      setArrivalFlightNo("");
-      setDepartureFlightNo("");
-    } catch (err) {
-      console.error(err);
-      alert("Error saving RSVP. Please try again.");
-    }
+  const formData = {
+    name,
+    countryCode,
+    contact,
+    response,
+    numberofPeople: numPeople,
+    arrivalDate,
+    arrivalTime,
+    departureDate,
+    departureTime,
+    transportMode,
+    address: localAddress,   // 👈 lowercase for consistency
+    needTransport,
+    arrivalTrainNo,
+    departureTrainNo,
+    arrivalFlightNo,
+    departureFlightNo,
   };
+
+  try {
+    // 1. Save to Firestore
+    await addDoc(collection(db, "rsvps"), formData);
+
+    // 2. Send to Google Sheets (Apps Script URL)
+    const scriptUrl = "http://localhost:5000/api/rsvp";
+    await fetch(scriptUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    // Success
+    setSubmitted(true);
+
+    // Reset form
+    setName("");
+    setContact("");
+    setResponse("");
+    setNumPeople("");
+    setArrivalDate("");
+    setArrivalTime("");
+    setDepartureDate("");
+    setDepartureTime("");
+    setTransportMode("");
+    setLocalAddress("");
+    setNeedTransport("");
+    setArrivalTrainNo("");
+    setDepartureTrainNo("");
+    setArrivalFlightNo("");
+    setDepartureFlightNo("");
+  } catch (err) {
+    console.error("Error saving RSVP:", err);
+    alert("Error saving RSVP. Please try again.");
+  }
+};
+
 
   if (submitted) {
     return (
-      <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 rounded-t-full bg-white">
+      <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 bg-white opacity-40">
         <h2 className="text-3xl font-bold">Thank you for your RSVP!</h2>
       </div>
     );
@@ -108,17 +122,14 @@ function RSVPForm() {
 
   return (
     <div
-      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out"
+      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-white opacity-40"
       style={{
-        minHeight: isMobile ? "600px" : "730px",
-        backgroundImage: `url(${isMobile ? mobileBgImage : bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        minHeight: isMobile ? (response? "700px" : "750px"):(response? "950px" : "900px"),
       }}
     >
       <div className="relative z-10 w-full">
         <h2
-          className="text-4xl mb-8 font-bold tracking-wide text-black drop-shadow-lg"
+          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide text-black drop-shadow-lg"
           style={{ fontFamily: "serif" }}
         >
           RSVP
@@ -127,7 +138,7 @@ function RSVPForm() {
         <div className="flex justify-center gap-6 mb-12">
           <button
             onClick={() => setResponse("yes")}
-            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow ${
+            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "yes"
                 ? "bg-black text-white"
                 : "bg-white text-black border border-black"
@@ -137,7 +148,7 @@ function RSVPForm() {
           </button>
           <button
             onClick={() => setResponse("no")}
-            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow ${
+            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "no"
                 ? "bg-black text-white"
                 : "bg-white text-black border border-black"
@@ -156,7 +167,7 @@ function RSVPForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
             />
 
             {/* Contact */}
@@ -194,7 +205,7 @@ function RSVPForm() {
                 <input
                   type="number"
                   min="1"
-                  placeholder="Number of People"
+                  placeholder="Number of Guest"
                   value={numPeople}
                   onChange={(e) => setNumPeople(e.target.value)}
                   required
@@ -203,7 +214,7 @@ function RSVPForm() {
 
                 {/* Arrival */}
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
-                  Enter arrival date and time
+                  Enter arrival date and time in Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
                   <input
@@ -224,7 +235,7 @@ function RSVPForm() {
 
                 {/* Departure */}
                 <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
-                  Enter departure date and time
+                  Enter departure date and time from Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
                   <input

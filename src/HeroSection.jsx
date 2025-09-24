@@ -34,8 +34,8 @@ function HeroSection() {
       <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
       {/* Text Content */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center text-white px-4 sm:px-10">
-        <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-[.10em] mb-4">
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center text-white px-4 sm:px-10 mt-48">
+        <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-[.10em] mb-5">
           SAVE THE DATE
         </h1>
 

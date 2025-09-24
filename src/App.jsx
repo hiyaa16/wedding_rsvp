@@ -9,6 +9,7 @@ import Itinerary from "./Itinerary";
 import Contact from "./Contact";
 import OutfitMoodboard from "./OutfitMoodboard";
 import MusicPlayer from "./MusicPlayer"; // ✅ Autoplay music
+import TestGetRequest from "./TestGetRequest"; // ✅ Temporary GET test component
 
 function Home() {
   // Scroll to top on page load
@@ -31,6 +32,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/test-get" element={<TestGetRequest />} /> {/* Temporary GET test */}
         <Route path="/our-story" element={<OurStory />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/itinerary" element={<Itinerary />} />

@@ -15,5 +15,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+    fetch('https://script.google.com/macros/s/AKfycbwOrfr52vN82MzOqM9m7KfUcOC9NxG8l1W68gjnDia0PvQipgnUoKTpLWdZ8cmvL0dJ/exec')
+      .then(response => response.json())
+      .then(data => console.log('GET request success:', data))
+      .catch(error => console.error('GET request error:', error));
+  </script>
   </body>
 </html>
