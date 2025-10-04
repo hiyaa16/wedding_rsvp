@@ -49,68 +49,58 @@ function RSVPForm() {
     setContactError(/^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
   };
 
-  // UPDATED Firestore submit logic
-  // UPDATED Firestore + Google Sheets submit logic
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (contactError) return;
+  // ✅ Only Firestore submit logic
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (contactError) return;
 
-  const formData = {
-    name,
-    countryCode,
-    contact,
-    response,
-    numberofPeople: numPeople,
-    arrivalDate,
-    arrivalTime,
-    departureDate,
-    departureTime,
-    transportMode,
-    address: localAddress,   // 👈 lowercase for consistency
-    needTransport,
-    arrivalTrainNo,
-    departureTrainNo,
-    arrivalFlightNo,
-    departureFlightNo,
+    const formData = {
+      name,
+      countryCode,
+      contact,
+      response,
+      numberofPeople: numPeople,
+      arrivalDate,
+      arrivalTime,
+      departureDate,
+      departureTime,
+      transportMode,
+      address: localAddress,
+      needTransport,
+      arrivalTrainNo,
+      departureTrainNo,
+      arrivalFlightNo,
+      departureFlightNo,
+    };
+
+    try {
+      // Save to Firestore only
+      await addDoc(collection(db, "rsvps"), formData);
+
+      // Success
+      setSubmitted(true);
+
+      // Reset form
+      setName("");
+      setContact("");
+      setResponse("");
+      setNumPeople("");
+      setArrivalDate("");
+      setArrivalTime("");
+      setDepartureDate("");
+      setDepartureTime("");
+      setTransportMode("");
+      setLocalAddress("");
+      setNeedTransport("");
+      setArrivalTrainNo("");
+      setDepartureTrainNo("");
+      setArrivalFlightNo("");
+      setDepartureFlightNo("");
+    } catch (err) {
+      console.error("Error saving RSVP:", err);
+      alert("Error saving RSVP. Please try again.");
+    }
   };
-
-  try {
-    // 1. Save to Firestore
-    await addDoc(collection(db, "rsvps"), formData);
-
-    // 2. Send to Google Sheets (Apps Script URL)
-    const scriptUrl = "http://localhost:5000/api/rsvp";
-    await fetch(scriptUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    // Success
-    setSubmitted(true);
-
-    // Reset form
-    setName("");
-    setContact("");
-    setResponse("");
-    setNumPeople("");
-    setArrivalDate("");
-    setArrivalTime("");
-    setDepartureDate("");
-    setDepartureTime("");
-    setTransportMode("");
-    setLocalAddress("");
-    setNeedTransport("");
-    setArrivalTrainNo("");
-    setDepartureTrainNo("");
-    setArrivalFlightNo("");
-    setDepartureFlightNo("");
-  } catch (err) {
-    console.error("Error saving RSVP:", err);
-    alert("Error saving RSVP. Please try again.");
-  }
-};
-
 
   if (submitted) {
     return (
@@ -124,7 +114,13 @@ const handleSubmit = async (e) => {
     <div
       className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-white opacity-40"
       style={{
-        minHeight: isMobile ? (response? "700px" : "750px"):(response? "950px" : "900px"),
+        minHeight: isMobile
+          ? response
+            ? "700px"
+            : "750px"
+          : response
+          ? "950px"
+          : "900px",
       }}
     >
       <div className="relative z-10 w-full">
@@ -196,7 +192,9 @@ const handleSubmit = async (e) => {
               />
             </div>
             {contactError && (
-              <div className="text-red-500 text-left ml-2 text-sm">{contactError}</div>
+              <div className="text-red-500 text-left ml-2 text-sm">
+                {contactError}
+              </div>
             )}
 
             {/* YES Response Fields */}
@@ -325,7 +323,9 @@ const handleSubmit = async (e) => {
 
                 {/* Need Transport */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4">
-                  <label className="font-serif text-black">Need transportation?</label>
+                  <label className="font-serif text-black">
+                    Need transportation?
+                  </label>
                   <label className="flex items-center space-x-1">
                     <input
                       type="radio"

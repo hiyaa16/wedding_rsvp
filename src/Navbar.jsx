@@ -92,10 +92,11 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/contact" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
-              Contact
-            </Link>
-          </li>
+  <Link to="/faq" className={menuOpen ? mobileLinkColor : textColor} onClick={() => setMenuOpen(false)}>
+    FAQ
+  </Link>
+</li>
+
         </ul>
       </div>
     </nav>

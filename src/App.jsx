@@ -6,10 +6,11 @@ import RSVPSection from "./RSVPSection";
 import OurStory from "./OurStory";
 import Gallery from "./Gallery";
 import Itinerary from "./Itinerary";
-import Contact from "./Contact";
+import Contact from "./FAQSection";
 import OutfitMoodboard from "./OutfitMoodboard";
 import MusicPlayer from "./MusicPlayer"; // ✅ Autoplay music
 import TestGetRequest from "./TestGetRequest"; // ✅ Temporary GET test component
+import FAQSection from "./FAQSection";
 
 function Home() {
   // Scroll to top on page load
@@ -36,7 +37,7 @@ function App() {
         <Route path="/our-story" element={<OurStory />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/itinerary" element={<Itinerary />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQSection />} />
         <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
       </Routes>
     </Router>
