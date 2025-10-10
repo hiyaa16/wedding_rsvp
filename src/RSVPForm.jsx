@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "./assets/image2.jpeg";
-import mobileBgImage from "./assets/mobile.jpeg";
+import bgImage from "./assets/image5.jpeg";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase"; // adjust path if needed
 
@@ -34,10 +33,10 @@ function RSVPForm() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
+    // Pre-load only the single background image
     const desktopImg = new window.Image();
     desktopImg.src = bgImage;
-    const mobileImg = new window.Image();
-    mobileImg.src = mobileBgImage;
+
     const handleResize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -46,10 +45,9 @@ function RSVPForm() {
   const handleContactChange = (e) => {
     const val = e.target.value;
     setContact(val);
-    setContactError(/^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
+    setContactError(val === "" || /^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
   };
 
-  // ✅ Only Firestore submit logic
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (contactError) return;

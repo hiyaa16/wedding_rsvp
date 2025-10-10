@@ -1,0 +1,5 @@
+f=open('new.txt','r+')
+f.write('\nlalaland')
+r=f.read()
+print(r)
+f.close()
