@@ -33,7 +33,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-sm shadow-lg">
+    <nav className="fixed top-0 left-0 w-full z-50 shadow-lg">
       <div className="mx-4 sm:mx-10 flex justify-between items-center py-4">
         {/* Logo/Title */}
         <div className={`text-2xl font-bold font-serif ${desktopTextColor}`}>
@@ -71,18 +71,12 @@ function Navbar() {
           <li><a href="/#rsvp" onClick={scrollToRSVP} className={menuOpen ? mobileLinkColor : desktopTextColor}>RSVP</a></li>
           <li><Link to="/outfit-moodboard" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Outfit Moodboard</Link></li>
           <li><Link to="/faq" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>FAQ</Link></li>
-          
-          {/* 🔑 ADMIN PANEL LINK */}
+          {/* NEW RSVP Table Public Link */}
           <li>
-            <Link 
-              to="/dashboard" 
-              className={`font-bold ${menuOpen ? mobileLinkColor : desktopTextColor}`} 
-              onClick={() => setMenuOpen(false)}
-            >
-              Admin Panel
+            <Link to="/rsvp-table" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>
+              RSVP Table
             </Link>
           </li>
-          {/* END ADMIN PANEL LINK */}
         </ul>
       </div>
     </nav>
