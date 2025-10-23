@@ -10,6 +10,7 @@ import Itinerary from "./Itinerary";
 import OutfitMoodboard from "./OutfitMoodboard";
 import MusicPlayer from "./MusicPlayer";
 import FAQSection from "./FAQSection";
+import ProtectedRoute from "./ProtectedRoute"; // add this import
 import RSVPTable from "./RSVPTable"; // Import nayi table
 
 function Home() {
@@ -36,7 +37,7 @@ function App() {
         <Route path="/itinerary" element={<Itinerary />} />
         <Route path="/faq" element={<FAQSection />} />
         <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
-        <Route path="/rsvp-table" element={<RSVPTable />} /> {/* Add new route */}
+        <Route path="/rsvp-table" element={<ProtectedRoute><RSVPTable /></ProtectedRoute>} /> {/* Add new route */}
       </Routes>
     </Router>
   );

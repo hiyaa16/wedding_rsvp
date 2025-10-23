@@ -22,9 +22,9 @@ function RSVPTable() {
   if (loading) return <div>Loading RSVP data...</div>;
 
   return (
-    <div className="p-4 overflow-auto bg-blue-200">
+    <div className="p-4 overflow-auto bg-gray-200">
       <h2 className="text-2xl font-bold mb-6 md:mt-20 text-center text-white">RSVP List</h2>
-      <table className="min-w-full border-collapse border border-gray-300 bg-blue-100">
+      <table className="min-w-full border-collapse border border-gray-300 bg-pink-100">
         <thead>
           <tr className="bg-gray-100">
             <th className="border border-gray-300 p-2">Name</th>
