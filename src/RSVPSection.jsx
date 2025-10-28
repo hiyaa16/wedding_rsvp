@@ -22,7 +22,7 @@ function RSVPSection() {
         <div className="absolute inset-0 bg-black/70"></div>
       </div>
 
-      <div className="h-screen"></div>
+      {/* Removed the scroll height spacer div */}
 
       <section id="rsvp" className="relative z-10 flex items-center justify-center min-h-screen px-4">
         <div className="max-w-lg w-full text-center p-8">

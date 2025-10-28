@@ -20,7 +20,7 @@ function Home() {
   return (
     <>
       <HeroSection />
-      <RSVPSection />
+      
     </>
   );
 }
@@ -37,6 +37,7 @@ function App() {
         <Route path="/itinerary" element={<Itinerary />} />
         <Route path="/faq" element={<FAQSection />} />
         <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
+        <Route path="/rsvp" element={<RSVPSection />} />
         <Route path="/rsvp-table" element={<ProtectedRoute><RSVPTable /></ProtectedRoute>} /> {/* Add new route */}
       </Routes>
     </Router>

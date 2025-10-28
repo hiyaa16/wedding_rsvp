@@ -5,9 +5,7 @@ function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === "/";
 
-  // Desktop text color: white
   const desktopTextColor = "text-white hover:text-pink-600 transition duration-300";
-  // Mobile text color
   const mobileLinkColor = "text-gray-800 hover:text-pink-600 transition duration-300";
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,31 +14,15 @@ function Navbar() {
     setMenuOpen((prev) => !prev);
   };
 
-  const scrollToRSVP = (e) => {
-    e.preventDefault();
-    if (isHome) {
-      const rsvpSection = document.getElementById("rsvp");
-      if (rsvpSection) rsvpSection.scrollIntoView({ behavior: "smooth" });
-    } else {
-      // Navigate to home and then scroll
-      window.location.href = "/";
-      setTimeout(() => {
-        const rsvpSection = document.getElementById("rsvp");
-        if (rsvpSection) rsvpSection.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-    }
-    setMenuOpen(false);
-  };
-
   return (
     <nav className="fixed top-0 left-0 w-full z-50 shadow-lg">
       <div className="mx-4 sm:mx-10 flex justify-between items-center py-4">
-        {/* Logo/Title */}
-        <div className={`text-2xl font-bold font-serif ${desktopTextColor}`}>
+        {/* Clickable Logo/Title */}
+        <Link to="/" className={`text-2xl font-bold font-serif ${desktopTextColor}`} onClick={() => setMenuOpen(false)}>
           #PattypulledVipul
-        </div>
+        </Link>
 
-        {/* Hamburger menu button - visible on small screens */}
+        {/* Hamburger menu for mobile */}
         <button className="sm:hidden text-white p-2 focus:outline-none" onClick={toggleMenu} aria-label="Toggle menu">
           {menuOpen ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +35,7 @@ function Navbar() {
           )}
         </button>
 
-        {/* Links */}
+        {/* Navigation Links */}
         <ul
           className={`
             flex flex-col sm:flex-row gap-6 sm:gap-9 font-serif
@@ -68,15 +50,10 @@ function Navbar() {
           <li><Link to="/our-story" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Our Story</Link></li>
           <li><Link to="/gallery" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Gallery</Link></li>
           <li><Link to="/itinerary" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Itinerary</Link></li>
-          <li><a href="/#rsvp" onClick={scrollToRSVP} className={menuOpen ? mobileLinkColor : desktopTextColor}>RSVP</a></li>
+          <li><Link to="/rsvp" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>RSVP</Link></li>
           <li><Link to="/outfit-moodboard" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Outfit Moodboard</Link></li>
           <li><Link to="/faq" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>FAQ</Link></li>
-          {/* NEW RSVP Table Public Link */}
-          <li>
-            <Link to="/rsvp-table" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>
-              RSVP Table
-            </Link>
-          </li>
+          <li><Link to="/rsvp-table" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>RSVP Table</Link></li>
         </ul>
       </div>
     </nav>

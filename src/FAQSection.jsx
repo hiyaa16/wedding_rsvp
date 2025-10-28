@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // 1. ✅ Import your background image here
-import faqBg from "./assets/bgw.jpg"; // <--- Make sure this path is correct
+import faqBg from "./assets/image5.jpeg"; // <--- Make sure this path is correct
 
 const faqData = [
   {
@@ -26,12 +26,17 @@ const faqData = [
   {
     question: "Is there a dress code?",
     answer:
-      "Yes! We do have a dress code 😉. Don’t worry, our Wedding Wardrobe Planner is right here on the website that will help you pick the perfect outfit for the celebration!",
+      "Yes, there is a dress code for each event ;) please refer to the wardrobe planner and style guide for further details",
   },
   {
     question: "What can I do while I'm in Jodhpur?",
-    answer:
-      "Jodhpur is known as the 'Blue City' with many attractions! You can visit Mehrangarh Fort, Jaswant Thada, Umaid Bhawan Palace, and explore the bustling markets.",
+    answer: [
+      "🏰 Mehrangarh Fort: One of the largest forts in India, offering panoramic views, the Sheesh Mahal, a museum, and zip-lining adventures.",
+      "👑 Umaid Bhawan Palace: A blend of Indian and European architecture, featuring a museum, a vintage car collection, and a luxury hotel.",
+      "🏙 The Blue City (Old Town): Wander through narrow alleys painted in vivid blue. Discover stepwells, local eateries, and artisan shops.",
+      "⛲ Jaswant Thada: A white marble cenotaph surrounded by peaceful gardens and a lake backdrop.",
+      "🏜 Camel & Jeep Safari in the Thar Desert: Enjoy camel rides at sunset, jeep safaris, Bishnoi village tours, wildlife spotting, and traditional Rajasthani dinners under the stars."
+    ]
   },
 ];
 
@@ -45,20 +50,19 @@ function FAQSection() {
       style={{
         minHeight: "100vh",
         width: "100vw",
-        // ✅ 2. Background image applied here
-        backgroundImage: `url(${faqBg})`, 
+        backgroundImage: `url(${faqBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundAttachment: "fixed", // Optional: Makes background fixed on scroll
-        position: "relative", // Changed from 'absolute' to 'relative' if this is a standalone section
+        backgroundAttachment: "fixed",
+        position: "relative",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "20px 0", // Added padding for better spacing on small screens
+        padding: "20px 0",
       }}
     >
-      {/* ✅ 3. Overlay for readability */}
+      {/* Overlay for readability */}
       <div 
         style={{
           position: "absolute",
@@ -66,11 +70,11 @@ function FAQSection() {
           left: 0,
           width: "100%",
           height: "100%",
-          opacity: 0.8, // Adjust opacity as needed
-          zIndex: 1, // Ensure overlay is behind content but above background
+          background: "#44475a", // subtle color for overlay for even more readability
+          opacity: 0.78,
+          zIndex: 1,
         }}
       />
-
       <h2
         style={{
           color: "white",
@@ -78,31 +82,31 @@ function FAQSection() {
           marginBottom: 32,
           marginTop: 40,
           textAlign: "center",
-          position: "relative", // Ensure text is above the overlay
+          position: "relative",
           zIndex: 2,
-          fontSize: "2.5rem", // Larger font for heading
-          padding: "0 10px", // Added padding for mobile
+          fontSize: "2.5rem",
+          padding: "0 10px",
         }}
       >
         Frequently Asked Questions
       </h2>
       <div 
         style={{ 
-          width: "90%", // Increased width for better mobile display
+          width: "90%",
           maxWidth: 900, 
           position: "relative", 
           zIndex: 2,
-          paddingBottom: "40px" // Added space at the bottom for content
+          paddingBottom: "40px"
         }}
       >
         {faqData.map((item, idx) => (
           <div
             key={idx}
             style={{
-              background: "#a07d7dff",
+              background: "#848faaff",
               borderRadius: 12,
               marginBottom: 16,
-              boxShadow: "0 1px 8px rgba(0,0,0,0.3)", // Corrected boxShadow syntax
+              boxShadow: "0 1px 8px rgba(0,0,0,0.3)",
               overflow: "hidden",
             }}
           >
@@ -114,14 +118,14 @@ function FAQSection() {
                 border: "none",
                 color: "white",
                 fontWeight: 700,
-                fontSize: "1.25rem", // Adjusted font size for responsiveness
+                fontSize: "1.25rem",
                 padding: "22px 24px",
                 borderRadius: 12,
                 textAlign: "left",
                 cursor: "pointer",
                 outline: "none",
-                display: "flex", // To align arrow
-                justifyContent: "space-between", // To push arrow to end
+                display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
@@ -131,37 +135,43 @@ function FAQSection() {
                   fontSize: "1.5rem", 
                   transform: openIndex === idx ? "rotate(180deg)" : "rotate(0deg)", 
                   transition: "transform 0.3s ease",
-                  marginLeft: "10px" // Space between text and arrow
+                  marginLeft: "10px"
                 }}
               >
-                &#9660; {/* Down arrow character */}
+                &#9660;
               </span>
             </button>
             {openIndex === idx && (
               <div
                 style={{
                   color: "#f3f1f1ff",
-                  fontSize: "1.1rem", // Adjusted font size
+                  fontSize: "1.1rem",
                   padding: "0 28px 18px 28px",
                   fontFamily: "inherit",
-                  animation: "fadeIn 0.3s forwards", // Added forwards to keep final state
+                  animation: "fadeIn 0.3s forwards",
                 }}
               >
-                {item.answer || (
-                  <span style={{ color: "#7a7979ff" }}>Answer coming soon.</span>
+                {Array.isArray(item.answer) ? (
+                  <ul style={{ margin: 0, paddingLeft: "1.2em" }}>
+                    {item.answer.map((line, i) => (
+                      <li key={i} style={{ marginBottom: 8, listStyle: "disc" }}>{line}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  item.answer || <span style={{ color: "#7a7979ff" }}>Answer coming soon.</span>
                 )}
               </div>
             )}
           </div>
         ))}
       </div>
-       {/* Global fadeIn animation (can be moved to a CSS file) */}
-       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
+      {/* Global fadeIn animation (can be moved to a CSS file) */}
+      <style>{`
+       @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(-10px); }
+         to { opacity: 1; transform: translateY(0); }
+       }
+     `}</style>
     </div>
   );
 }

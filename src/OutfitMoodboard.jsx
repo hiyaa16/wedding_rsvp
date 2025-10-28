@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImage from "./assets/bgw.jpg";
+import bgImage from "./assets/image5.jpeg";
 import carouselImage1 from "./assets/Wardrobe Planner/1.png";
 import carouselImage2 from "./assets/Wardrobe Planner/2.png";
 import carouselImage3 from "./assets/Wardrobe Planner/3.png";

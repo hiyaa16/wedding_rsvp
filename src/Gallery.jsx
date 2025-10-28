@@ -3,7 +3,7 @@ import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firest
 import { FaPlus, FaTimes } from 'react-icons/fa';
 import { db } from './firebase';
 
-import galleryBg from './assets/bgw.jpg';
+import galleryBg from './assets/image5.jpeg';
 import wedding1 from './assets/image3.jpg';
 import wedding2 from './assets/image.jpg';
 import wedding3 from './assets/image8.jpg';
