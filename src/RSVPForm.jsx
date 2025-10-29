@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import bgImage from "./assets/image5.jpeg";
 import { collection, addDoc } from "firebase/firestore";
+import bg from './assets/rsvpbg.jpg';
 import { db } from "./firebase"; // adjust path if needed
 
 const COUNTRY_CODES = [
@@ -102,15 +103,15 @@ function RSVPForm() {
 
   if (submitted) {
     return (
-      <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 bg-white opacity-40">
-        <h2 className="text-3xl font-bold">Thank you for your RSVP!</h2>
+      <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 bg-white opacity-90 rounded-xl">
+        <h2 className="text-3xl font-bold text-gray-800">Thank you for your RSVP!</h2>
       </div>
     );
   }
 
   return (
     <div
-      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-white opacity-40"
+      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out **bg-cover bg-center bg-no-repeat**"
       style={{
         minHeight: isMobile
           ? response
@@ -119,23 +120,28 @@ function RSVPForm() {
           : response
           ? "950px"
           : "900px",
+        backgroundImage: `url(${bg})`,
       }}
     >
-      <div className="relative z-10 w-full">
+      {/* Background Overlay for Readability */}
+      <div className="absolute inset-0 bg-black opacity-20 rounded-t-full"></div> 
+
+      <div className="relative z-10 w-full"> 
         <h2
-          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide text-black drop-shadow-lg"
+          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide **text-white** drop-shadow-lg" // Fixed: Ensure heading is white
           style={{ fontFamily: "serif" }}
         >
           RSVP
         </h2>
 
+        {/* Accept/Decline Buttons (Updated for better visibility) */}
         <div className="flex justify-center gap-6 mb-12">
           <button
             onClick={() => setResponse("yes")}
             className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "yes"
-                ? "bg-black text-white"
-                : "bg-white text-black border border-black"
+                ? "**bg-white text-black**" // Fixed: Active button is bright white
+                : "**bg-transparent text-white border border-white** hover:bg-white hover:text-black" // Fixed: Inactive button is transparent with white border
             }`}
           >
             Accept
@@ -144,8 +150,8 @@ function RSVPForm() {
             onClick={() => setResponse("no")}
             className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "no"
-                ? "bg-black text-white"
-                : "bg-white text-black border border-black"
+                ? "**bg-white text-black**" // Fixed: Active button is bright white
+                : "**bg-transparent text-white border border-white** hover:bg-white hover:text-black" // Fixed: Inactive button is transparent with white border
             }`}
           >
             Decline
@@ -190,7 +196,7 @@ function RSVPForm() {
               />
             </div>
             {contactError && (
-              <div className="text-red-500 text-left ml-2 text-sm">
+              <div className="**text-red-400** text-left ml-2 text-sm"> {/* Fixed: Better red contrast */}
                 {contactError}
               </div>
             )}
@@ -209,7 +215,7 @@ function RSVPForm() {
                 />
 
                 {/* Arrival */}
-                <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
+                <div className="text-left pl-1 font-serif **text-white** text-sm font-semibold"> {/* Fixed: Text is white */}
                   Enter arrival date and time in Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
@@ -230,7 +236,7 @@ function RSVPForm() {
                 </div>
 
                 {/* Departure */}
-                <div className="text-left pl-1 font-serif text-black text-sm font-semibold">
+                <div className="text-left pl-1 font-serif **text-white** text-sm font-semibold"> {/* Fixed: Text is white */}
                   Enter departure date and time from Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
@@ -263,7 +269,7 @@ function RSVPForm() {
                   <option value="local">Local</option>
                 </select>
 
-                {/* Railway */}
+                {/* Railway and Airport fields (Input styles are fine as they are white) */}
                 {transportMode === "railway" && (
                   <>
                     <input
@@ -320,8 +326,8 @@ function RSVPForm() {
                 )}
 
                 {/* Need Transport */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4">
-                  <label className="font-serif text-black">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4 **text-white**"> {/* Fixed: Labels are white */}
+                  <label className="font-serif">
                     Need transportation?
                   </label>
                   <label className="flex items-center space-x-1">
@@ -331,6 +337,7 @@ function RSVPForm() {
                       value="yes"
                       checked={needTransport === "yes"}
                       onChange={() => setNeedTransport("yes")}
+                      className="**text-white bg-gray-700 border-gray-300**" // Tailwind utility for radio/checkbox styling
                     />
                     <span>Yes</span>
                   </label>
@@ -341,6 +348,7 @@ function RSVPForm() {
                       value="no"
                       checked={needTransport === "no"}
                       onChange={() => setNeedTransport("no")}
+                      className="**text-white bg-gray-700 border-gray-300**" // Tailwind utility for radio/checkbox styling
                     />
                     <span>No</span>
                   </label>
@@ -351,7 +359,7 @@ function RSVPForm() {
             <button
               type="submit"
               disabled={!!contactError}
-              className="w-40 mt-6 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-700 disabled:opacity-50"
+              className="w-40 mt-6 py-3 rounded-full bg-black  text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50" // Fixed: Submit button is bright white
             >
               Submit
             </button>

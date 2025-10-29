@@ -30,12 +30,13 @@ function OutfitMoodboard() {
 
   const getRelativePosition = (index) => {
     let diff = index - currentSlide;
+    // Handle wrap-around logic for continuous carousel effect
     if (diff > totalSlides / 2) diff -= totalSlides;
     if (diff < -totalSlides / 2) diff += totalSlides;
     return diff;
   };
 
-  const CENTER_SCALE = 1.6;
+  const CENTER_SCALE = 1.5;
   const SIDE_SCALE = 0.6;
   const SIDE_OFFSET = 250;
   const CARD_BASE_WIDTH = "34%";
@@ -45,20 +46,22 @@ function OutfitMoodboard() {
       className="relative w-full min-h-screen bg-cover bg-center flex flex-col items-center overflow-hidden"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* <div className="absolute inset-0 bg-black opacity-50 z-0"></div> */}
-
+      {/* Black Overlay */}
+      <div className="absolute inset-0 bg-black/50 z-0"></div> 
+      
+      {/* Content Container (FIXED: The content below was previously unclosed) */}
       <div className="relative z-10 text-white text-center w-full max-w-6xl px-2 sm:px-4 flex flex-col h-full">
         <h1
-  className="mt-16 sm:mt-12 md:mt-24 text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 drop-shadow-lg leading-tight px-2"
-  style={{ fontFamily: 'serif' }}
->
-  OUR WEDDING WARDROBE PLANNER
-</h1>
+          // ERROR FIXED: Removed the Markdown asterisks (**) from the className string
+          className="mt-16 sm:mt-12 md:mt-24 text-2xl sm:text-4xl md:text-5xl font-light tracking-tight mb-4 drop-shadow-lg leading-tight px-2"
+          style={{ fontFamily: 'Cinzel Decorative, serif'}}
+        >
+          Our Wedding Wardrobe Planner
+        </h1>
 
-
-
-        {/* ↓ Carousel moved slightly lower with mt-10 */}
+        {/* Carousel Container */}
         <div className="relative w-full mx-auto flex-grow flex items-center justify-center min-h-[400px] sm:min-h-[500px] md:min-h-[600px] mt-10 sm:mt-16 md:mt-24">
+
           {/* Left Arrow */}
           <button
             onClick={prevSlide}
@@ -103,6 +106,7 @@ function OutfitMoodboard() {
             </svg>
           </button>
 
+          {/* Carousel Image Mapping */}
           {carouselImages.map((item, index) => {
             const position = getRelativePosition(index);
             const isCenter = position === 0;
@@ -138,11 +142,11 @@ function OutfitMoodboard() {
             return (
               <div
                 key={index}
-                className="absolute h-[50%] sm:h-[65%] md:h-[80%] overflow-hidden cursor-pointer"
+                className="absolute h-[50%] sm:h-[65%] md:h-[80%] overflow-hidden cursor-pointer rounded-xl shadow-2xl"
                 style={{
                   width: CARD_BASE_WIDTH,
                   zIndex,
-                  transition: "all 800ms linear",
+                  transition: "all 800ms ease-out", // Used ease-out for a smoother feel
                   transform: `translateX(-50%) ${transformStyle}`,
                   opacity,
                   left: "50%",
@@ -153,7 +157,7 @@ function OutfitMoodboard() {
                 <img
                   src={item.src}
                   alt={`Outfit Moodboard ${index + 1}`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover" // Changed to object-cover for better fit
                 />
               </div>
             );

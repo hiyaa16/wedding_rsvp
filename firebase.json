@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "pattypulledvipul",
     "public": "dist",
     "ignore": [
       "firebase.json",
