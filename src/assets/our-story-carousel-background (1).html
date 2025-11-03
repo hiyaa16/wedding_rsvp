@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story - Vipul & Patty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background with carousel image effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Replace this URL with your actual carousel image */
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%2367548a" width="1920" height="1080"/><text x="960" y="540" font-family="Arial" font-size="48" fill="white" text-anchor="middle" opacity="0.3">Your Carousel Background Image Here</text></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: blur(3px);
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        /* Dark overlay for better readability */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(103, 84, 138, 0.85) 0%, rgba(139, 107, 20, 0.85) 100%);
+            z-index: -1;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            padding: 100px 20px 80px;
+            color: white;
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .page-header p {
+            font-size: 20px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Timeline Container */
+        .timeline-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px 100px 80px;
+        }
+
+        /* Timeline Line - REMOVED for cleaner look */
+        .timeline-line {
+            display: none;
+        }
+
+        /* Milestone Container */
+        .milestone {
+            position: relative;
+            margin-bottom: 100px;
+            display: flex;
+            align-items: flex-start;
+            gap: 60px;
+            opacity: 0;
+            animation: fadeInLeft 0.8s ease forwards;
+        }
+
+        /* Year Display - Left Side */
+        .milestone-year {
+            position: relative;
+            flex-shrink: 0;
+            width: 140px;
+            text-align: right;
+            padding-right: 40px;
+        }
+
+        .milestone-year .year-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .milestone-year .date-text {
+            display: none;
+        }
+
+        /* Timeline Dot - Standalone without line */
+        .timeline-dot {
+            position: absolute;
+            right: -14px;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        /* Story Card - High Opacity White Background */
+        .story-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            flex-grow: 1;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: -15px;
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid rgba(255, 255, 255, 0.95);
+        }
+
+        .story-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Card Content */
+        .milestone-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            color: #2c2c2c;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .milestone-location {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .milestone-location::before {
+            content: "📍";
+            font-size: 18px;
+        }
+
+        .milestone-story {
+            font-size: 18px;
+            color: #444;
+            line-height: 1.9;
+            margin-bottom: 30px;
+        }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 13px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-placeholder:hover::after {
+            left: 100%;
+        }
+
+        /* Final Message */
+        .final-message {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 60px;
+            max-width: 800px;
+            margin: 60px auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .final-message h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 46px;
+            color: #67548a;
+            margin-bottom: 25px;
+        }
+
+        .final-message p {
+            font-size: 20px;
+            color: #444;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .final-message .highlight {
+            font-size: 26px;
+            color: #67548a;
+            font-weight: 700;
+            font-style: italic;
+            margin-top: 30px;
+            display: block;
+        }
+
+        /* Decorative Elements */
+        .decorative-line {
+            width: 60px;
+            height: 2px;
+            background: #67548a;
+            margin: 0 auto 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .timeline-container {
+                padding-left: 60px;
+            }
+
+            .milestone-year {
+                width: 100px;
+                padding-right: 30px;
+            }
+
+            .milestone-year .year-text {
+                font-size: 36px;
+            }
+
+            .milestone {
+                gap: 40px;
+            }
+
+            .story-card {
+                padding: 35px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                filter: blur(5px);
+                opacity: 0.2;
+            }
+
+            .page-header h1 {
+                font-size: 38px;
+            }
+
+            .page-header p {
+                font-size: 16px;
+            }
+
+            .timeline-container {
+                padding-left: 30px;
+            }
+
+            .milestone {
+                gap: 20px;
+                margin-bottom: 60px;
+            }
+
+            .milestone-year {
+                width: 70px;
+                padding-right: 20px;
+            }
+
+            .milestone-year .year-text {
+                font-size: 28px;
+            }
+
+            .timeline-dot {
+                width: 14px;
+                height: 14px;
+                right: -7px;
+                border-width: 2px;
+            }
+
+            .story-card {
+                padding: 25px;
+                background: rgba(255, 255, 255, 0.98);
+            }
+
+            .story-card::before {
+                border-right-width: 10px;
+                top: 20px;
+                left: -10px;
+            }
+
+            .milestone-title {
+                font-size: 26px;
+            }
+
+            .milestone-story {
+                font-size: 16px;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .final-message {
+                padding: 35px 25px;
+                background: rgba(255, 255, 255, 0.98);
+            }
+
+            .final-message h2 {
+                font-size: 32px;
+            }
+
+            .final-message p {
+                font-size: 17px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .milestone:nth-child(1) { animation-delay: 0.1s; }
+        .milestone:nth-child(2) { animation-delay: 0.2s; }
+        .milestone:nth-child(3) { animation-delay: 0.3s; }
+        .milestone:nth-child(4) { animation-delay: 0.4s; }
+        .milestone:nth-child(5) { animation-delay: 0.5s; }
+        .milestone:nth-child(6) { animation-delay: 0.6s; }
+        .milestone:nth-child(7) { animation-delay: 0.7s; }
+        .milestone:nth-child(8) { animation-delay: 0.8s; }
+        .milestone:nth-child(9) { animation-delay: 0.9s; }
+
+        /* Instructions Banner */
+        .instruction-banner {
+            background: rgba(255, 255, 255, 0.95);
+            border-left: 5px solid #67548a;
+            padding: 20px 30px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .instruction-banner h3 {
+            color: #67548a;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .instruction-banner p {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .instruction-banner code {
+            background: #f5f5f5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #67548a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Instructions for Developer -->
+    <div class="instruction-banner">
+        <h3>🎨 Developer Instructions for Background</h3>
+        <p><strong>Step 1:</strong> Replace the <code>body::before</code> background-image URL with your actual carousel image.</p>
+        <p><strong>Step 2:</strong> The image will be automatically blurred and faded to 30% opacity for readability.</p>
+        <p><strong>Step 3:</strong> The gradient overlay (<code>body::after</code>) ensures all text remains readable.</p>
+        <p><strong>Step 4:</strong> White cards have 95% opacity with backdrop blur for perfect readability on any background.</p>
+        <p><strong>Note:</strong> You can use the same carousel rotation system from your homepage here!</p>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>How It All Began</h1>
+        <p>The journey of Vipul & Patty</p>
+    </div>
+
+    <!-- Timeline Container -->
+    <div class="timeline-container">
+
+        <!-- Milestone 1: 2018 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2018</div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">The First Hello</h2>
+                <div class="milestone-location">München, Germany</div>
+                <p class="milestone-story">
+                    They first met on February 14, 2018, in a university dorm. What started as casual hellos in the hallway slowly turned into longer conversations. Neither knew it then, but this chance encounter would change everything.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Photo 1</div>
+                    <div class="photo-placeholder">Photo 2</div>
+                    <div class="photo-placeholder">Photo 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 2: 2019 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2019</div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">Coffee Dates & Deep Talks</h2>
+                <div class="milestone-location">Munich, Germany</div>
+                <p class="milestone-story">
+                    By 2019, those hallway hellos had become regular coffee dates. They discovered shared dreams, laughed at the same jokes, and found comfort in each other's company. What began as friendship was quietly becoming something more.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Photo 1</div>
+                    <div class="photo-placeholder">Photo 2</div>
+                    <div class="photo-placeholder">Photo 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 3: 2019 Mid Year -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2019</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">The Moment Everything Changed</h2>
+                <p class="milestone-story">
+                    One conversation changed everything. Looking back, they both realized they had been falling for each other all along. The friendship that felt so natural had blossomed into love, and neither could imagine life without the other.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Photo 1</div>
+                    <div class="photo-placeholder">Photo 2</div>
+                    <div class="photo-placeholder">Photo 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 4: 2020 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2020</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">Love in the Time of Lockdown</h2>
+                <div class="milestone-location">Virtual dates across time zones</div>
+                <p class="milestone-story">
+                    When COVID-19 hit, distance became their biggest challenge. Video calls replaced coffee dates, and timezone differences meant stolen moments whenever they could. But love found a way—every call, every message, every "goodnight" across continents only made their bond stronger.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Video Call 1</div>
+                    <div class="photo-placeholder">Video Call 2</div>
+                    <div class="photo-placeholder">Screenshot</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 5: 2021 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2021</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">Finally Together Again</h2>
+                <div class="milestone-location">Germany & Beyond</div>
+                <p class="milestone-story">
+                    As the world slowly reopened, they made up for lost time. From exploring Germany to holiday trips, every moment together felt like a celebration. They had survived distance; now they were ready to build a future.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Travel Photo 1</div>
+                    <div class="photo-placeholder">Travel Photo 2</div>
+                    <div class="photo-placeholder">Travel Photo 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 6: 2022 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2022</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">Adventures & New Beginnings</h2>
+                <div class="milestone-location">California & Beyond</div>
+                <p class="milestone-story">
+                    Life took them to new places and new adventures. From California beaches to new experiences, they tackled everything as a team. Every challenge, every joy—they faced it together, stronger than ever.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">California 1</div>
+                    <div class="photo-placeholder">California 2</div>
+                    <div class="photo-placeholder">Adventure Photo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 7: 2023 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2023</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">The Beginning of Forever</h2>
+                <div class="milestone-location">Proposal Location</div>
+                <p class="milestone-story">
+                    On [Date], Patty got down on one knee and asked Vipul to spend forever together. With tears of joy and hearts full of love, they said yes to a lifetime of adventures, laughter, and endless love. The best chapter was just beginning.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Proposal 1</div>
+                    <div class="photo-placeholder">Proposal 2</div>
+                    <div class="photo-placeholder">Ring Photo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone 8: 2024 -->
+        <div class="milestone">
+            <div class="milestone-year">
+                <div class="year-text">2024</div>
+                
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="story-card">
+                <h2 class="milestone-title">The Journey to "I Do"</h2>
+                <p class="milestone-story">
+                    From planning their dream destination wedding in Jodhpur to sharing this special moment with their loved ones, every detail has been chosen with love. As they prepare to exchange vows, they're grateful for every twist and turn that brought them here—to this moment, to this love, to each other.
+                </p>
+                <div class="photo-grid">
+                    <div class="photo-placeholder">Pre-wedding 1</div>
+                    <div class="photo-placeholder">Pre-wedding 2</div>
+                    <div class="photo-placeholder">Pre-wedding 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="final-message">
+            <div class="decorative-line"></div>
+            <h2>February 20-21, 2026</h2>
+            <div class="decorative-line"></div>
+            <p>After years of friendship, love, distance, and devotion, Vipul and Patty are finally becoming one. Surrounded by family and friends in the royal city of Jodhpur, they'll celebrate not just a wedding, but a love story that was always meant to be.</p>
+            <span class="highlight">And this is just the beginning...</span>
+        </div>
+
+    </div>
+
+</body>
+</html>

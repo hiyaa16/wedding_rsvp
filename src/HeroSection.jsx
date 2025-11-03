@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import img1 from "./assets/1st.jpg";
-import img2 from "./assets/image3.jpeg";
+import img8 from "./assets/image3.jpeg";
 import img3 from "./assets/catfam.jpg";
 import img4 from "./assets/dinner.jpg"
 import img5 from "./assets/holdhand.jpg"
 import img6 from "./assets/married.jpg"
 import img7 from "./assets/main.jpg"
-import img8 from "./assets/greendress.jpeg"
+import img2 from "./assets/greendress.jpeg"
 
 function getTimeRemaining(targetDate) {
   const now = new Date();
@@ -58,7 +58,7 @@ function HeroSection() {
       ))}
 
       {/* Black Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-40 dark:bg-opacity-70 z-10"></div>
 
       {/* Centered Content - Changed 'justify-center' to 'justify-end' and added 'pb-24' (Padding Bottom) */}
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-end text-center text-white px-4 sm:px-10 pb-24">
@@ -67,7 +67,7 @@ function HeroSection() {
         </h1>
 
         <div className="flex flex-col sm:flex-row items-center justify-center w-full gap-3 sm:gap-6">
-          <div className="sm:border-r-2 sm:border-white pr-0 sm:pr-8 text-sm sm:text-base md:text-lg opacity-90 font-light text-center sm:text-left">
+          <div className="sm:border-r-2 sm:border-white pr-0 sm:pr-8 text-sm  sm:text-base md:text-lg opacity-90 font-bold text-center sm:text-left">
             Indana
             <br />
             Jodhpur
@@ -75,7 +75,7 @@ function HeroSection() {
           <div className="text-2xl sm:text-3xl md:text-4xl italic font-serif mx-2 sm:mx-6 opacity-100">
             Vipul & Patty
           </div>
-          <div className="sm:border-l-2 sm:border-white pl-0 sm:pl-8 text-sm sm:text-base md:text-lg opacity-90 font-light text-center sm:text-right">
+          <div className="sm:border-l-2 sm:border-white pl-0 sm:pl-8 text-sm sm:text-base md:text-lg opacity-90 font-bold text-center sm:text-right">
             20 & 21 February
             <br />
             2026
@@ -105,7 +105,7 @@ function HeroSection() {
               <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">SECONDS</span>
             </div>
           </div>
-          <div className="mt-5 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">To go!</div>
+          <div className="mt-5 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">to go!</div>
         </div>
       </div>
 

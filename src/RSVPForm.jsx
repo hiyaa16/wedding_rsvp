@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import bgImage from "./assets/image5.jpeg";
 import { collection, addDoc } from "firebase/firestore";
-import bg from './assets/rsvpbg.jpg';
-import { db } from "./firebase"; // adjust path if needed
+import bg from "./assets/rsvpbg.jpg";
+import { db } from "./firebase";
 
 const COUNTRY_CODES = [
   { code: "+91", label: "India" },
@@ -20,7 +20,9 @@ function RSVPForm() {
   const [transportMode, setTransportMode] = useState("");
   const [needTransport, setNeedTransport] = useState("");
   const [name, setName] = useState("");
-  const [numPeople, setNumPeople] = useState("");
+  const [numAdults, setNumAdults] = useState(0);
+  const [numKids, setNumKids] = useState(0);
+  const [guestNames, setGuestNames] = useState([]);
   const [arrivalDate, setArrivalDate] = useState("");
   const [arrivalTime, setArrivalTime] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -34,7 +36,6 @@ function RSVPForm() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    // Pre-load only the single background image
     const desktopImg = new window.Image();
     desktopImg.src = bgImage;
 
@@ -43,10 +44,33 @@ function RSVPForm() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Dynamic guest name handling
+  useEffect(() => {
+    const totalGuests = Number(numAdults) + Number(numKids);
+    const updatedNames = [...guestNames];
+
+    if (totalGuests > guestNames.length) {
+      for (let i = guestNames.length; i < totalGuests; i++) {
+        updatedNames.push("");
+      }
+    } else if (totalGuests < guestNames.length) {
+      updatedNames.splice(totalGuests);
+    }
+    setGuestNames(updatedNames);
+  }, [numAdults, numKids]);
+
+  const handleGuestNameChange = (index, value) => {
+    const updated = [...guestNames];
+    updated[index] = value;
+    setGuestNames(updated);
+  };
+
   const handleContactChange = (e) => {
     const val = e.target.value;
     setContact(val);
-    setContactError(val === "" || /^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number");
+    setContactError(
+      val === "" || /^\d{10}$/.test(val) ? "" : "Enter a valid 10-digit number"
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -58,7 +82,9 @@ function RSVPForm() {
       countryCode,
       contact,
       response,
-      numberofPeople: numPeople,
+      adults: numAdults,
+      kids: numKids,
+      guestNames,
       arrivalDate,
       arrivalTime,
       departureDate,
@@ -73,17 +99,15 @@ function RSVPForm() {
     };
 
     try {
-      // Save to Firestore only
       await addDoc(collection(db, "rsvps"), formData);
-
-      // Success
       setSubmitted(true);
 
-      // Reset form
       setName("");
       setContact("");
       setResponse("");
-      setNumPeople("");
+      setNumAdults(0);
+      setNumKids(0);
+      setGuestNames([]);
       setArrivalDate("");
       setArrivalTime("");
       setDepartureDate("");
@@ -104,44 +128,44 @@ function RSVPForm() {
   if (submitted) {
     return (
       <div className="w-full sm:w-[550px] mx-auto p-8 text-center shadow-3xl mt-10 mb-10 bg-white opacity-90 rounded-xl">
-        <h2 className="text-3xl font-bold text-gray-800">Thank you for your RSVP!</h2>
+        <h2 className="text-3xl font-bold text-gray-800">
+          Thank you for your RSVP!
+        </h2>
       </div>
     );
   }
 
   return (
     <div
-      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out **bg-cover bg-center bg-no-repeat**"
+      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-cover bg-center bg-no-repeat"
       style={{
         minHeight: isMobile
           ? response
             ? "700px"
             : "750px"
           : response
-          ? "950px"
+          ? "1100px"
           : "900px",
         backgroundImage: `url(${bg})`,
       }}
     >
-      {/* Background Overlay for Readability */}
-      <div className="absolute inset-0 bg-black opacity-20 rounded-t-full"></div> 
+      <div className="absolute inset-0 bg-black opacity-20 rounded-t-full"></div>
 
-      <div className="relative z-10 w-full"> 
+      <div className="relative z-10 w-full">
         <h2
-          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide **text-white** drop-shadow-lg" // Fixed: Ensure heading is white
+          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide text-white drop-shadow-lg"
           style={{ fontFamily: "serif" }}
         >
           RSVP
         </h2>
 
-        {/* Accept/Decline Buttons (Updated for better visibility) */}
         <div className="flex justify-center gap-6 mb-12">
           <button
             onClick={() => setResponse("yes")}
             className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "yes"
-                ? "**bg-white text-black**" // Fixed: Active button is bright white
-                : "**bg-transparent text-white border border-white** hover:bg-white hover:text-black" // Fixed: Inactive button is transparent with white border
+                ? "bg-white text-black"
+                : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
             }`}
           >
             Accept
@@ -150,8 +174,8 @@ function RSVPForm() {
             onClick={() => setResponse("no")}
             className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
               response === "no"
-                ? "**bg-white text-black**" // Fixed: Active button is bright white
-                : "**bg-transparent text-white border border-white** hover:bg-white hover:text-black" // Fixed: Inactive button is transparent with white border
+                ? "bg-white text-black"
+                : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
             }`}
           >
             Decline
@@ -196,7 +220,7 @@ function RSVPForm() {
               />
             </div>
             {contactError && (
-              <div className="**text-red-400** text-left ml-2 text-sm"> {/* Fixed: Better red contrast */}
+              <div className="text-red-400 text-left ml-2 text-sm">
                 {contactError}
               </div>
             )}
@@ -204,18 +228,71 @@ function RSVPForm() {
             {/* YES Response Fields */}
             {response === "yes" && (
               <>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="Number of Guest"
-                  value={numPeople}
-                  onChange={(e) => setNumPeople(e.target.value)}
-                  required
-                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                />
+                {/* Adults + Kids */}
+                <div className="text-left font-serif text-white text-sm font-semibold">
+  Number of Guests
+</div>
+
+<div className="flex gap-4">
+  {/* Adults */}
+  <div className="flex flex-col w-1/2">
+    <label className="text-xs text-white font-serif mb-1">Adults</label>
+    <input
+      type="number"
+      min="0"
+      placeholder="0"
+      value={numAdults}
+      onChange={(e) => {
+        const adults = parseInt(e.target.value) || 0;
+        setNumAdults(adults);
+        updateGuestNames(adults, numKids);
+      }}
+      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+    />
+  </div>
+
+  {/* Kids */}
+  <div className="flex flex-col w-1/2">
+    <label className="text-xs text-white font-serif mb-1">Kids</label>
+    <input
+      type="number"
+      min="0"
+      placeholder="0"
+      value={numKids}
+      onChange={(e) => {
+        const kids = parseInt(e.target.value) || 0;
+        setNumKids(kids);
+        updateGuestNames(numAdults, kids);
+      }}
+      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+    />
+  </div>
+</div>
+
+{/* Dynamic Guest Names */}
+{guestNames.length > 0 && (
+  <div className="space-y-3 mt-3">
+    {guestNames.map((guest, i) => {
+      const label =
+        i < numAdults ? `Adult ${i + 1} Name` : `Kid ${i - numAdults + 1} Name`;
+      return (
+        <input
+          key={i}
+          type="text"
+          placeholder={label}
+          value={guest}
+          onChange={(e) => handleGuestNameChange(i, e.target.value)}
+          className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+          required
+        />
+      );
+    })}
+  </div>
+)}
+
 
                 {/* Arrival */}
-                <div className="text-left pl-1 font-serif **text-white** text-sm font-semibold"> {/* Fixed: Text is white */}
+                <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
                   Enter arrival date and time in Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
@@ -236,7 +313,7 @@ function RSVPForm() {
                 </div>
 
                 {/* Departure */}
-                <div className="text-left pl-1 font-serif **text-white** text-sm font-semibold"> {/* Fixed: Text is white */}
+                <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
                   Enter departure date and time from Jodhpur
                 </div>
                 <div className="flex gap-4 flex-col sm:flex-row">
@@ -256,7 +333,7 @@ function RSVPForm() {
                   />
                 </div>
 
-                {/* Transport Mode */}
+                {/* Mode of Transport */}
                 <select
                   className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                   value={transportMode}
@@ -269,7 +346,7 @@ function RSVPForm() {
                   <option value="local">Local</option>
                 </select>
 
-                {/* Railway and Airport fields (Input styles are fine as they are white) */}
+                {/* Transport details */}
                 {transportMode === "railway" && (
                   <>
                     <input
@@ -286,12 +363,11 @@ function RSVPForm() {
                       value={departureTrainNo}
                       onChange={(e) => setDepartureTrainNo(e.target.value)}
                       required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                     />
                   </>
                 )}
 
-                {/* Airport */}
                 {transportMode === "airport" && (
                   <>
                     <input
@@ -308,12 +384,11 @@ function RSVPForm() {
                       value={departureFlightNo}
                       onChange={(e) => setDepartureFlightNo(e.target.value)}
                       required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                     />
                   </>
                 )}
 
-                {/* Local */}
                 {transportMode === "local" && (
                   <input
                     type="text"
@@ -326,7 +401,7 @@ function RSVPForm() {
                 )}
 
                 {/* Need Transport */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4 **text-white**"> {/* Fixed: Labels are white */}
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4 text-white">
                   <label className="font-serif">
                     Need transportation?
                   </label>
@@ -337,7 +412,6 @@ function RSVPForm() {
                       value="yes"
                       checked={needTransport === "yes"}
                       onChange={() => setNeedTransport("yes")}
-                      className="**text-white bg-gray-700 border-gray-300**" // Tailwind utility for radio/checkbox styling
                     />
                     <span>Yes</span>
                   </label>
@@ -348,7 +422,6 @@ function RSVPForm() {
                       value="no"
                       checked={needTransport === "no"}
                       onChange={() => setNeedTransport("no")}
-                      className="**text-white bg-gray-700 border-gray-300**" // Tailwind utility for radio/checkbox styling
                     />
                     <span>No</span>
                   </label>
@@ -359,7 +432,7 @@ function RSVPForm() {
             <button
               type="submit"
               disabled={!!contactError}
-              className="w-40 mt-6 py-3 rounded-full bg-black  text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50" // Fixed: Submit button is bright white
+              className="w-40 mt-6 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50"
             >
               Submit
             </button>

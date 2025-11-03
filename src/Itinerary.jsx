@@ -17,7 +17,7 @@ function Itinerary() {
         style={{ backgroundImage: `url(${itiBg})` }}
       >
         {/* Black Overlay (Dull Effect) */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/70"></div>
       </div>
 
       {/* Content Container: Ensure content appears above the overlay */}

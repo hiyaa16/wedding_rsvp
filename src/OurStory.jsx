@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import storyBg from "./assets/bgw1.jpg";
+import React, { useEffect } from "react";
+import { MapPin } from "lucide-react";
+import storyBg from "./assets/image5.jpeg";
 import image2018 from "./assets/s1.jpg";
 import image2019 from "./assets/s2.jpg";
 import image2020 from "./assets/s3.jpg";
@@ -9,211 +10,179 @@ import image2023 from "./assets/s6.jpg";
 import image2024 from "./assets/s8.jpg";
 import image2025 from "./assets/s9.jpg";
 
-const storyEvents = [
-  {
-    year: '2018',
-    text: 'Their love story began on February 02, 2018, in Mannheim, Germany, when both of them embarked on their study exchange semester. Together on a new continent, fate introduced them as roommates for the next 6 months! From travelling to over 12 countries together, to celebrating birthdays and making life-long memories, Vipul and Patty were officially together on April 30, 2018 — which is now also the day of their legal marriage!',
-    image: image2018,
-    align: 'left',
-  },
-  {
-    year: '2019',
-    text: 'A year into long distance (and multiple flights back and forth to each other!), Vipul and Patty had both graduated from university. Now began the full-time job hunt so they could continue taking expensive flights, whilst they both figure out how to close the distance…',
-    image: image2019,
-    align: 'right',
-  },
-  {
-    year: '2020',
-    text: 'Shortly after celebrating their first in-person Valentines’ day together in Toronto, COVID struck! The worst possible thing to happen to a long-distance couple...in August, they both decided to adopt the most handsome and charming kitten ever, Storm! Separated for the longest time in their relationship (8 months!) Patty and Vipul finally reunited in Mexico for a getaway in October!',
-    image: image2020,
-    align: 'left',
-  },
-  {
-    year: '2021',
-    text: 'More than 3 years of long-distance (and a lot of Aeroplan Miles…) later, they finally closed the gap! After yet another summer in Mexico, Patty officially moved to Toronto on August 20, 2021. 3 beautiful seasons later, they decorated their Christmas tree for the first time. Even though Storm kept knocking down all the ornaments and tried to eat fallen pine needles, they were all happy to spend the holidays together as a family of three!',
-    image: image2021,
-    align: 'right',
-  },
-  {
-    year: '2022',
-    text: 'From exploring the Canadian Rockies, the wowie of Maui and enjoying the California sunshine, Vipul and Patty complete their first year living together. With many memories made, Vipul starts thinking about their future…',
-    image: image2022,
-    align: 'left',
-  },
-  {
-    year: '2023',
-    text: 'During Patty’s first visit to India, Vipul pops the question — she says yes — the crowd goes wild! After having felt like they had defied all the odds, they realised their journey was merely beginning…',
-    image: image2023,
-    align: 'right',
-  },
-  {
-    year: '2024',
-    text: 'Patty & Vipul take a “few” trips to unwind from planning three weddings in the next year and a half.',
-    image: image2024,
-    align: 'left',
-  },
-  {
-    year: '2025',
-    text: 'With two of three weddings done (and a mini-moon to Amsterdam, an ode to Patty & Vipul’s first memorable trips back in 2018), we are now here…super excited to be planning our grand finale! We cannot wait to celebrate our unique journey with our beloved ones at the Indana Palace, Jodhpur in dhoom dham style!',
-    image: image2025,
-    align: 'right',
-  },
-];
-
-const useIntersectionObserver = (ref, options) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const isRevealedRef = useRef(false);
-
+export default function OurStory() {
   useEffect(() => {
-    if (isRevealedRef.current) {
-      setIsVisible(true);
-      return;
+    const id = "ourstory-fonts";
+    if (!document.getElementById(id)) {
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href =
+        "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap";
+      document.head.appendChild(link);
     }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        isRevealedRef.current = true;
-        observer.unobserve(entry.target);
-      }
-    }, options);
-
-    if (ref.current) observer.observe(ref.current);
-
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
-  }, [ref, options]);
-
-  return isVisible;
-};
-
-const TimelineItem = ({ year, text, image, align }) => {
-  const itemRef = useRef(null);
-  const isVisible = useIntersectionObserver(itemRef, { threshold: 0.2 });
-
-  const baseAnimationClasses = `transition duration-1000 ease-out opacity-0 transform`;
-  const activeAnimationClasses = `opacity-100 translate-x-0`;
-  const initialAnimationClasses = align === "left" ? "-translate-x-full" : "translate-x-full";
-
-  const contentClasses = isVisible ? activeAnimationClasses : initialAnimationClasses;
-  const boxStyleClasses = `bg-white/10 p-6 md:p-8 rounded-lg shadow-2xl backdrop-blur-sm border border-white/20`;
-  const negativeMarginLeft = "md:-ml-10";
-  const negativeMarginRight = "md:-mr-10";
-
-  return (
-    <div ref={itemRef} className="relative mb-20 flex w-full justify-center z-20">
-      {/* Timeline heart on the center line */}
-      <div className="hidden md:flex absolute inset-y-0 left-1/2 transform -translate-x-1/2 w-10 justify-center items-center pointer-events-none">
-        <span className="inline-block w-5 h-5 rounded-full bg-white border-2 border-pink-400 flex items-center justify-center shadow-lg text-pink-400 text-xs z-40">
-          ♥
-        </span>
-      </div>
-      {/* Timeline content */}
-      <div
-        className={`relative w-full max-w-lg flex flex-col p-0 ${align === "left"
-          ? `md:mr-auto md:text-right md:pr-10 ${negativeMarginLeft}`
-          : `md:ml-auto md:text-left md:pl-10 ${negativeMarginRight}`
-          } ${baseAnimationClasses} ${contentClasses}`}
-      >
-        <div className={boxStyleClasses}>
-          <p
-            className="text-base sm:text-lg font-light tracking-wide leading-relaxed text-white"
-            style={{ fontFamily: "'Bodoni Moda', serif" }}
-          >
-            {text}
-          </p>
-        </div>
-        <img
-          src={image}
-          alt={`Vipul and Patty in ${year}`}
-          className="w-full h-auto object-cover mt-4 rounded-lg shadow-xl max-w-sm md:max-w-full mx-auto"
-        />
-        {/* Heart & year below image, centered */}
-        <span
-          className="flex items-center justify-center gap-2 text-center text-lg sm:text-2xl font-serif text-pink-400 mt-4"
-          style={{ fontFamily: "Cinzel Decorative, serif" }}
-        >
-          <span className="inline-block w-5 h-5 rounded-full bg-white border-2 border-pink-400 flex items-center justify-center shadow-lg text-pink-400 text-xs">
-            ♥
-          </span>
-          {year}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-function OurStory() {
-  const timelineRef = useRef(null);
-  const [lineHeight, setLineHeight] = useState(0);
-
-  const handleScroll = useCallback(() => {
-    const timelineContainer = timelineRef.current;
-    if (!timelineContainer) return;
-    const { top, height } = timelineContainer.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const scrolled = Math.max(0, viewportHeight - top);
-    const fillPercentage = Math.min(100, (scrolled / height) * 100);
-    setLineHeight(fillPercentage);
   }, []);
 
-  useEffect(() => {
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+  const milestones = [
+    {
+      year: "2018",
+      title: "The First Hello",
+      location: "München, Germany",
+      story:
+        "They first met on February 14, 2018, in a university dorm. What started as casual hellos in the hallway slowly turned into longer conversations. Neither knew it then, but this chance encounter would change everything.",
+      image: image2018,
+    },
+    {
+      year: "2019",
+      title: "Coffee Dates & Deep Talks",
+      location: "Munich, Germany",
+      story:
+        "By 2019, those hallway hellos had become regular coffee dates. They discovered shared dreams, laughed at the same jokes, and found comfort in each other's company. What began as friendship was quietly becoming something more.",
+      image: image2019,
+    },
+    {
+      year: "2020",
+      title: "Love in the Time of Lockdown",
+      location: "Virtual dates across time zones",
+      story:
+        "When COVID-19 hit, distance became their biggest challenge. Video calls replaced coffee dates, and timezone differences meant stolen moments whenever they could. But love found a way—every call, every message, every 'goodnight' across continents only made their bond stronger.",
+      image: image2020,
+    },
+    {
+      year: "2021",
+      title: "Finally Together Again",
+      location: "Germany & Beyond",
+      story:
+        "As the world slowly reopened, they made up for lost time. From exploring Germany to holiday trips, every moment together felt like a celebration. They had survived distance; now they were ready to build a future.",
+      image: image2021,
+    },
+    {
+      year: "2022",
+      title: "Adventures & New Beginnings",
+      location: "California & Beyond",
+      story:
+        "Life took them to new places and new adventures. From California beaches to new experiences, they tackled everything as a team. Every challenge, every joy—they faced it together, stronger than ever.",
+      image: image2022,
+    },
+    {
+      year: "2023",
+      title: "The Beginning of Forever",
+      location: "India",
+      story:
+        "Patty got down on one knee and asked Vipul to spend forever together. With tears of joy and hearts full of love, they said yes to a lifetime of adventures, laughter, and endless love. The best chapter was just beginning.",
+      image: image2023,
+    },
+    {
+      year: "2024",
+      title: "The Journey to 'I Do'",
+      story:
+        "From planning their dream destination wedding in Jodhpur to sharing this special moment with their loved ones, every detail has been chosen with love. As they prepare to exchange vows, they're grateful for every twist and turn that brought them here—to this moment, to this love, to each other.",
+      image: image2024,
+    },
+  ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-black">
-      {/* Background */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: `url(${storyBg})` }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-      </div>
+    <div
+      className="relative min-h-screen bg-fixed bg-center bg-cover"
+      style={{ backgroundImage: `url(${storyBg})` }}
+    >
+      {/* 🖤 Black Overlay */}
+      <div className="absolute inset-0 bg-black/60 z-10"></div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center py-4 text-white">
+      {/* Header */}
+      <header className="text-center py-24 text-white relative z-10">
         <h1
-          style={{ fontFamily: "Cinzel Decorative, serif" }}
-          className="text-center text-3xl sm:text-4xl md:text-5xl mt-24 font-thin tracking-normal drop-shadow-lg mb-16"
+          className=" text-4xl md:text-6xl font-bold drop-shadow-lg mb-6"
+          style={{ fontFamily: "'Playfair Display', serif" }}
         >
-          HOW IT ALL BEGAN
+          How It All Began
         </h1>
-
-        {/* Timeline */}
-        <div ref={timelineRef} className="w-full max-w-5xl px-4 relative mt-10 mb-20">
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gray-600/30"></div>
-          <div
-            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-pink-400"
-            style={{
-              height: `${lineHeight}%`,
-              top: 0,
-              transition: "height 0.2s linear",
-            }}
-          ></div>
-          <div className="md:hidden absolute left-4 h-full w-0.5 bg-gray-600/30"></div>
-
-          {storyEvents.map((event, index) => (
-            <TimelineItem
-              key={index}
-              year={event.year}
-              text={event.text}
-              image={event.image}
-              align={window.innerWidth < 768 ? "left" : event.align}
-            />
-          ))}
-
-          <div className="hidden md:block absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-2 w-5 h-5 rounded-full bg-pink-400 shadow-xl"></div>
-        </div>
-
-        <p className="mt-10 mb-20 text-center text-lg text-gray-300 max-w-3xl">
-          Thank you for following our journey! We can't wait to celebrate with you.
+        <p
+          className="mt-3 text-lg text-gray-200"
+          style={{ fontFamily: "'Inter', sans-serif" }}
+        >
+          The journey of Vipul & Patty
         </p>
-      </div>
+        <div className="mx-auto mt-5 w-24 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+      </header>
+
+      {/* Main Timeline */}
+      <main className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+        {milestones.map((m, i) => (
+          <section
+            key={i}
+            className="flex flex-col md:flex-row items-center justify-center gap-10 mb-24 group transition-transform"
+          >
+            {/* Year */}
+            <div className="w-full md:w-32 text-4xl font-bold text-white md:text-right md:pr-10">
+              <span style={{ fontFamily: "'Playfair Display', serif" }}>
+                {m.year}
+              </span>
+            </div>
+
+            {/* Story Card */}
+            <div
+              className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-white/30 flex flex-col transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+              style={{ flex: 1 }}
+            >
+              <h2
+                className="text-3xl font-bold text-gray-900 mb-3"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {m.title}
+              </h2>
+
+              {m.location && (
+                <p
+                  className="flex items-center gap-2 italic text-gray-600 mb-4"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  <MapPin size={18} className="text-pink-600" />
+                  {m.location}
+                </p>
+              )}
+
+              <p
+                className="text-gray-700 leading-relaxed mb-6"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                {m.story}
+              </p>
+
+              <div className="overflow-hidden rounded-xl">
+                <img
+                  src={m.image}
+                  alt={m.title}
+                  className="w-full h-auto max-h-[500px] md:h-80 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            </div>
+          </section>
+        ))}
+
+        {/* ✨ Final Wedding Card Section */}
+        <section className="relative flex items-center justify-center py-16 mt-10">
+          {/* Background overlay */}
+          <div className="absolute inset-0 rounded-2xl"></div>
+
+          <div className="relative z-10 max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-10 text-center">
+            <hr className="w-16 mx-auto border-[1.5px] border-purple-600 mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-purple-800 mb-4">
+              February 20–21, 2026
+            </h2>
+            <hr className="w-16 mx-auto border-[1.5px] border-purple-600 mb-4" />
+            <p className="text-gray-700 text-lg leading-relaxed mb-4">
+              After years of friendship, love, distance, and devotion, Vipul and
+              Patty are finally becoming one. Surrounded by family and friends
+              in the royal city of Jodhpur, they'll celebrate not just a wedding,
+              but a love story that was always meant to be.
+            </p>
+            <p className="text-purple-800 font-semibold italic text-lg">
+              And this is just the beginning…
+            </p>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
-
-export default OurStory;

@@ -15,11 +15,11 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 shadow-lg">
+    <nav className="fixed top-0 left-0 w-full z-50 shadow-lg ">
       <div className="mx-4 sm:mx-10 flex justify-between items-center py-4">
         {/* Clickable Logo/Title */}
         <Link to="/" className={`text-2xl font-bold font-serif ${desktopTextColor}`} onClick={() => setMenuOpen(false)}>
-          #PattypulledVipul
+          #PattyPulledVipul
         </Link>
 
         {/* Hamburger menu for mobile */}
@@ -53,7 +53,7 @@ function Navbar() {
           <li><Link to="/rsvp" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>RSVP</Link></li>
           <li><Link to="/outfit-moodboard" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>Outfit Moodboard</Link></li>
           <li><Link to="/faq" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>FAQ</Link></li>
-          <li><Link to="/rsvp-table" className={menuOpen ? mobileLinkColor : desktopTextColor} onClick={() => setMenuOpen(false)}>RSVP Table</Link></li>
+         
         </ul>
       </div>
     </nav>

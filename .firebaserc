@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "vipattykishaadi"
-  }
+    "default": "vipattykishaadi",
+    "pattypulledvipul": "vipattykishaadi"
+  },
+  "targets": {},
+  "etags": {}
 }

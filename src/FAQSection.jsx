@@ -103,7 +103,7 @@ function FAQSection() {
           <div
             key={idx}
             style={{
-              background: "#cb947dff",
+              background: "#152243ff",
               borderRadius: 12,
               marginBottom: 16,
               boxShadow: "0 1px 8px rgba(0,0,0,0.3)",
