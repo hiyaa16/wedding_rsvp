@@ -52,7 +52,7 @@ function OutfitMoodboard() {
 
       <div className="relative z-10 text-white text-center w-full max-w-6xl px-2 sm:px-4 flex flex-col h-full">
         <h1
-          className="mt-16 sm:mt-12 md:mt-24 text-2xl sm:text-4xl md:text-5xl font-light tracking-tight mb-4 drop-shadow-lg leading-tight px-2"
+          className="mt-20 sm:mt-14 md:mt-24 text-xl sm:text-3xl md:text-5xl font-light tracking-tight mb-4 drop-shadow-lg leading-tight px-2"
           style={{ fontFamily: "Cinzel Decorative, serif" }}
         >
           Our Wedding Wardrobe Planner
@@ -153,10 +153,13 @@ function OutfitMoodboard() {
                 onClick={() => setCurrentSlide(index)}
               >
                 <img
-                  src={item.src}
-                  alt={`Outfit Moodboard ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
+                src={item.src}
+                alt={`Outfit Moodboard ${index + 1}`}
+               className={`w-full h-full ${
+               window.innerWidth < 768 ? "object-contain " : "object-cover"
+  }`}
+/>
+
               </div>
             );
           })}
