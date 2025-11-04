@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImage from "./assets/bgw2.jpg"; // <-- local image import
+import bgImage from "./assets/image5.jpeg"; // <-- local image import
 
 function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,7 +27,7 @@ function ProtectedRoute({ children }) {
       }}
     >
       {/* optional dark overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-70"></div>
 
       <form
         onSubmit={handleSubmit}

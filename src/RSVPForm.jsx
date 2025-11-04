@@ -159,39 +159,21 @@ function RSVPForm() {
           RSVP
         </h2>
 
-        <div className="flex justify-center gap-6 mb-12">
-          <button
-            onClick={() => setResponse("yes")}
-            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
-              response === "yes"
-                ? "bg-white text-black"
-                : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+        {/* Step 1 - Name + Contact */}
+        {!response && (
+          <div
+            className={`w-full space-y-6 transition-all duration-500 ${
+              response === "" ? "mt-24" : "mt-10"
             }`}
           >
-            Accept
-          </button>
-          <button
-            onClick={() => setResponse("no")}
-            className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
-              response === "no"
-                ? "bg-white text-black"
-                : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-            }`}
-          >
-            Decline
-          </button>
-        </div>
-
-        {(response === "yes" || response === "no") && (
-          <form className="w-full space-y-6" onSubmit={handleSubmit}>
-            {/* Name */}
+            {/* Smaller Name Field */}
             <input
               type="text"
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none mt-2"
+              className="w-full p-3 text-sm rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
             />
 
             {/* Contact */}
@@ -225,209 +207,276 @@ function RSVPForm() {
               </div>
             )}
 
-            {/* YES Response Fields */}
-            {response === "yes" && (
-              <>
-                {/* Adults + Kids */}
-                <div className="text-left font-serif text-white text-sm font-semibold">
-  Number of Guests
-</div>
+            {/* Accept / Decline buttons */}
+            <div className="flex justify-center gap-6 mb-12">
+              <button
+                onClick={() => setResponse("yes")}
+                className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
+                  response === "yes"
+                    ? "bg-white text-black"
+                    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                }`}
+              >
+                Accept
+              </button>
+             <button
+  onClick={async () => {
+    if (!name || !contact || contactError) {
+      alert("Please fill in your name and contact number before declining.");
+      return;
+    }
 
-<div className="flex gap-4">
-  {/* Adults */}
-  <div className="flex flex-col w-1/2">
-    <label className="text-xs text-white font-serif mb-1">Adults</label>
-    <input
-      type="number"
-      min="0"
-      placeholder="0"
-      value={numAdults}
-      onChange={(e) => {
-        const adults = parseInt(e.target.value) || 0;
-        setNumAdults(adults);
-        updateGuestNames(adults, numKids);
-      }}
-      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-    />
-  </div>
+    try {
+      await addDoc(collection(db, "rsvps"), {
+        name,
+        countryCode,
+        contact,
+        response: "no",
+      });
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error saving RSVP:", err);
+      alert("Error saving RSVP. Please try again.");
+    }
+  }}
+  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
+    response === "no"
+      ? "bg-white text-black"
+      : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+  }`}
+>
+  Decline
+</button>
 
-  {/* Kids */}
-  <div className="flex flex-col w-1/2">
-    <label className="text-xs text-white font-serif mb-1">Kids</label>
-    <input
-      type="number"
-      min="0"
-      placeholder="0"
-      value={numKids}
-      onChange={(e) => {
-        const kids = parseInt(e.target.value) || 0;
-        setNumKids(kids);
-        updateGuestNames(numAdults, kids);
-      }}
-      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-    />
-  </div>
-</div>
-
-{/* Dynamic Guest Names */}
-{guestNames.length > 0 && (
-  <div className="space-y-3 mt-3">
-    {guestNames.map((guest, i) => {
-      const label =
-        i < numAdults ? `Adult ${i + 1} Name` : `Kid ${i - numAdults + 1} Name`;
-      return (
-        <input
-          key={i}
-          type="text"
-          placeholder={label}
-          value={guest}
-          onChange={(e) => handleGuestNameChange(i, e.target.value)}
-          className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-          required
-        />
-      );
-    })}
-  </div>
-)}
+            </div>
+          </div>
+        )}
 
 
-                {/* Arrival */}
-                <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-                  Enter arrival date and time in Jodhpur
-                </div>
-                <div className="flex gap-4 flex-col sm:flex-row">
-                  <input
-                    type="date"
-                    value={arrivalDate}
-                    onChange={(e) => setArrivalDate(e.target.value)}
-                    required
-                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  />
-                  <input
-                    type="time"
-                    value={arrivalTime}
-                    onChange={(e) => setArrivalTime(e.target.value)}
-                    required
-                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  />
-                </div>
 
-                {/* Departure */}
-                <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-                  Enter departure date and time from Jodhpur
-                </div>
-                <div className="flex gap-4 flex-col sm:flex-row">
-                  <input
-                    type="date"
-                    value={departureDate}
-                    onChange={(e) => setDepartureDate(e.target.value)}
-                    required
-                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  />
-                  <input
-                    type="time"
-                    value={departureTime}
-                    onChange={(e) => setDepartureTime(e.target.value)}
-                    required
-                    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  />
-                </div>
 
-                {/* Mode of Transport */}
-                <select
+        {/* Step 2: Show full form only if Accept */}
+        {response === "yes" && (
+  <form
+    className="w-full space-y-6 mt-20 sm:mt-20 transition-all duration-500 ease-in-out"
+    onSubmit={handleSubmit}
+  >
+
+            {/* Everything below remains your original YES flow untouched */}
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              readOnly
+              className="w-full p-3 rounded-full font-serif bg-gray-200 shadow border border-gray-300"
+            />
+            {/* Contact */}
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center">
+              <select
+                className="w-full sm:w-auto p-3 rounded-full sm:rounded-l-full sm:rounded-r-none font-serif bg-gray-200 shadow border sm:border-r-0 border-gray-300"
+                value={countryCode}
+                readOnly
+              >
+                <option>{countryCode}</option>
+              </select>
+              <input
+                type="text"
+                value={contact}
+                readOnly
+                className="flex-1 w-full p-3 rounded-full sm:rounded-r-full sm:rounded-l-none font-serif bg-gray-200 shadow border border-gray-300"
+              />
+            </div>
+
+            {/* Guests */}
+            <div className="text-left font-serif text-white text-sm font-semibold">
+              Number of Guests
+            </div>
+            <div className="flex gap-4">
+              <div className="flex flex-col w-1/2">
+                <label className="text-xs text-white font-serif mb-1">
+                  Adults
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="0"
+                  value={numAdults}
+                  onChange={(e) => setNumAdults(parseInt(e.target.value) || 0)}
                   className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  value={transportMode}
-                  onChange={(e) => setTransportMode(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col w-1/2">
+                <label className="text-xs text-white font-serif mb-1">
+                  Kids
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="0"
+                  value={numKids}
+                  onChange={(e) => setNumKids(parseInt(e.target.value) || 0)}
+                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Guest names */}
+            {guestNames.length > 0 && (
+              <div className="space-y-3 mt-3">
+                {guestNames.map((guest, i) => {
+                  const label =
+                    i < numAdults
+                      ? `Adult ${i + 1} Name`
+                      : `Kid ${i - numAdults + 1} Name`;
+                  return (
+                    <input
+                      key={i}
+                      type="text"
+                      placeholder={label}
+                      value={guest}
+                      onChange={(e) =>
+                        handleGuestNameChange(i, e.target.value)
+                      }
+                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+                      required
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Arrival */}
+            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+              Enter arrival date and time in Jodhpur
+            </div>
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <input
+                type="date"
+                value={arrivalDate}
+                onChange={(e) => setArrivalDate(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+              <input
+                type="time"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
+
+            {/* Departure */}
+            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+              Enter departure date and time from Jodhpur
+            </div>
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <input
+                type="date"
+                value={departureDate}
+                onChange={(e) => setDepartureDate(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+              <input
+                type="time"
+                value={departureTime}
+                onChange={(e) => setDepartureTime(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
+
+            {/* Transport */}
+            <select
+              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              value={transportMode}
+              onChange={(e) => setTransportMode(e.target.value)}
+              required
+            >
+              <option value="">Mode of Transportation</option>
+              <option value="railway">Railway Station</option>
+              <option value="airport">Airport</option>
+              <option value="local">Local</option>
+            </select>
+
+            {transportMode === "railway" && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Arrival Train No."
+                  value={arrivalTrainNo}
+                  onChange={(e) => setArrivalTrainNo(e.target.value)}
                   required
-                >
-                  <option value="">Mode of Transportation</option>
-                  <option value="railway">Railway Station</option>
-                  <option value="airport">Airport</option>
-                  <option value="local">Local</option>
-                </select>
-
-                {/* Transport details */}
-                {transportMode === "railway" && (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Arrival Train No."
-                      value={arrivalTrainNo}
-                      onChange={(e) => setArrivalTrainNo(e.target.value)}
-                      required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Departure Train No."
-                      value={departureTrainNo}
-                      onChange={(e) => setDepartureTrainNo(e.target.value)}
-                      required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                    />
-                  </>
-                )}
-
-                {transportMode === "airport" && (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Arrival Flight No."
-                      value={arrivalFlightNo}
-                      onChange={(e) => setArrivalFlightNo(e.target.value)}
-                      required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Departure Flight No."
-                      value={departureFlightNo}
-                      onChange={(e) => setDepartureFlightNo(e.target.value)}
-                      required
-                      className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                    />
-                  </>
-                )}
-
-                {transportMode === "local" && (
-                  <input
-                    type="text"
-                    placeholder="Address"
-                    value={localAddress}
-                    onChange={(e) => setLocalAddress(e.target.value)}
-                    required
-                    className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-                  />
-                )}
-
-                {/* Need Transport */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4 text-white">
-                  <label className="font-serif">
-                    Need transportation?
-                  </label>
-                  <label className="flex items-center space-x-1">
-                    <input
-                      type="radio"
-                      name="needTransport"
-                      value="yes"
-                      checked={needTransport === "yes"}
-                      onChange={() => setNeedTransport("yes")}
-                    />
-                    <span>Yes</span>
-                  </label>
-                  <label className="flex items-center space-x-1">
-                    <input
-                      type="radio"
-                      name="needTransport"
-                      value="no"
-                      checked={needTransport === "no"}
-                      onChange={() => setNeedTransport("no")}
-                    />
-                    <span>No</span>
-                  </label>
-                </div>
+                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300"
+                />
+                <input
+                  type="text"
+                  placeholder="Departure Train No."
+                  value={departureTrainNo}
+                  onChange={(e) => setDepartureTrainNo(e.target.value)}
+                  required
+                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300"
+                />
               </>
             )}
+
+            {transportMode === "airport" && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Arrival Flight No."
+                  value={arrivalFlightNo}
+                  onChange={(e) => setArrivalFlightNo(e.target.value)}
+                  required
+                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300"
+                />
+                <input
+                  type="text"
+                  placeholder="Departure Flight No."
+                  value={departureFlightNo}
+                  onChange={(e) => setDepartureFlightNo(e.target.value)}
+                  required
+                  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300"
+                />
+              </>
+            )}
+
+            {transportMode === "local" && (
+              <input
+                type="text"
+                placeholder="Address"
+                value={localAddress}
+                onChange={(e) => setLocalAddress(e.target.value)}
+                required
+                className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300"
+              />
+            )}
+
+            {/* Need Transport */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center mt-4 text-white">
+              <label className="font-serif">Need transportation?</label>
+              <label className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="needTransport"
+                  value="yes"
+                  checked={needTransport === "yes"}
+                  onChange={() => setNeedTransport("yes")}
+                />
+                <span>Yes</span>
+              </label>
+              <label className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="needTransport"
+                  value="no"
+                  checked={needTransport === "no"}
+                  onChange={() => setNeedTransport("no")}
+                />
+                <span>No</span>
+              </label>
+            </div>
 
             <button
               type="submit"

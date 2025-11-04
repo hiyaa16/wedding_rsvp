@@ -105,7 +105,7 @@ function HeroSection() {
               <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">SECONDS</span>
             </div>
           </div>
-          <div className="mt-5 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">to go!</div>
+          <div className="mt-5 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">to go...</div>
         </div>
       </div>
 

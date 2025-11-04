@@ -8,7 +8,6 @@ import image2021 from "./assets/s4.jpg";
 import image2022 from "./assets/s5.jpg";
 import image2023 from "./assets/s6.jpg";
 import image2024 from "./assets/s8.jpg";
-import image2025 from "./assets/s9.jpg";
 
 export default function OurStory() {
   useEffect(() => {
@@ -92,7 +91,7 @@ export default function OurStory() {
       {/* Header */}
       <header className="text-center py-24 text-white relative z-10">
         <h1
-          className=" text-4xl md:text-6xl font-bold drop-shadow-lg mb-6"
+          className="text-4xl md:text-6xl font-bold drop-shadow-lg mb-6"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           How It All Began
@@ -107,14 +106,14 @@ export default function OurStory() {
       </header>
 
       {/* Main Timeline */}
-      <main className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+      <main className="relative z-10 max-w-6xl mx-auto px-6 pb-20 flex flex-col items-center">
         {milestones.map((m, i) => (
           <section
             key={i}
-            className="flex flex-col md:flex-row items-center justify-center gap-10 mb-24 group transition-transform"
+            className="flex flex-col items-center text-center gap-6 mb-20 group transition-transform w-full md:w-[75%]"
           >
             {/* Year */}
-            <div className="w-full md:w-32 text-4xl font-bold text-white md:text-right md:pr-10">
+            <div className="text-4xl font-bold text-white mb-4">
               <span style={{ fontFamily: "'Playfair Display', serif" }}>
                 {m.year}
               </span>
@@ -122,8 +121,13 @@ export default function OurStory() {
 
             {/* Story Card */}
             <div
-              className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-white/30 flex flex-col transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
-              style={{ flex: 1 }}
+              className="bg-white/95 backdrop-blur-md rounded-2xl 
+                         p-8 md:p-6 
+                         shadow-lg border border-white/30 
+                         flex flex-col items-center text-center
+                         transition-all duration-300 
+                         hover:scale-[1.02] hover:shadow-2xl
+                         w-full"
             >
               <h2
                 className="text-3xl font-bold text-gray-900 mb-3"
@@ -134,7 +138,7 @@ export default function OurStory() {
 
               {m.location && (
                 <p
-                  className="flex items-center gap-2 italic text-gray-600 mb-4"
+                  className="flex justify-center items-center gap-2 italic text-gray-600 mb-4"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
                   <MapPin size={18} className="text-pink-600" />
@@ -149,11 +153,11 @@ export default function OurStory() {
                 {m.story}
               </p>
 
-              <div className="overflow-hidden rounded-xl">
+              <div className="overflow-hidden rounded-xl w-full">
                 <img
                   src={m.image}
                   alt={m.title}
-                  className="w-full h-auto max-h-[500px] md:h-80 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-auto max-h-[450px] md:max-h-[350px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -162,7 +166,6 @@ export default function OurStory() {
 
         {/* ✨ Final Wedding Card Section */}
         <section className="relative flex items-center justify-center py-16 mt-10">
-          {/* Background overlay */}
           <div className="absolute inset-0 rounded-2xl"></div>
 
           <div className="relative z-10 max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-10 text-center">
