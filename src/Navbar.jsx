@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+// Apna logo image import karo (agar local file hai):
+ import LogoImg from "./assets/logo.png"; // <-- Apni logo image ka actual path lagao
 
 function Navbar() {
   const location = useLocation();
@@ -14,15 +16,15 @@ function Navbar() {
     setMenuOpen((prev) => !prev);
   };
 
-  return (
+ return (
     <nav className="fixed top-0 left-0 w-full z-50 shadow-lg bg-[#001926]">
-      <div className="mx-4 sm:mx-10 flex justify-between items-center py-4">
-        {/* Logo / Title */}
+      <div className="mx-4 sm:mx-6 flex justify-between items-center py-4">
         <Link
           to="/"
-          className={`text-2xl font-bold font-serif ${desktopTextColor}`}
+          className={`flex items-center gap-1 text-2xl font-bold font-serif text-white hover:text-pink-400 transition duration-300`}
           onClick={() => setMenuOpen(false)}
         >
+          <img src={LogoImg} alt="Logo" className="h-8 w-8 object-contain" />
           #PattyPulledVipul
         </Link>
 
