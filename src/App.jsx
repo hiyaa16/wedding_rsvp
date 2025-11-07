@@ -26,8 +26,10 @@ function Home() {
 
 function App() {
   return (
+    <>
+     <MusicPlayer />
     <Router>
-      <MusicPlayer />
+    
       <AdminButton />
       <Navbar />
 
@@ -45,6 +47,7 @@ function App() {
         <Route path="/admin" element={<ProtectedRoute />} />
       </Routes>
     </Router>
+    </>
   );
 }
 

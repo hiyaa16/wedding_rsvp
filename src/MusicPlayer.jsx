@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import song from "/assets/music.mp3";
 
 function MusicPlayer() {
@@ -6,14 +6,19 @@ function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
-    // Try to autoplay on mount
+    // Autoplay logic
     const playAudio = async () => {
       try {
-        await audioRef.current.play(); // Always start playing
+        await audioRef.current.play();
         setIsPlaying(true);
       } catch (err) {
-        // Autoplay blocked on mobile
-        console.log("Autoplay blocked:", err);
+        // Autoplay blocked - play on first user click
+        const clickHandler = () => {
+          audioRef.current.play();
+          setIsPlaying(true);
+          window.removeEventListener("click", clickHandler);
+        };
+        window.addEventListener("click", clickHandler);
         setIsPlaying(false);
       }
     };
@@ -33,8 +38,6 @@ function MusicPlayer() {
   return (
     <>
       <audio ref={audioRef} src={song} loop autoPlay />
-
-      {/* Floating icon bottom-right */}
       <button
         onClick={toggleMusic}
         className="fixed bottom-4 right-4 text-black text-2xl z-50 bg-transparent border-none cursor-pointer"

@@ -209,19 +209,26 @@ function RSVPForm() {
 
             {/* Accept / Decline buttons */}
             <div className="flex justify-center gap-6 mb-12">
-              <button
-                onClick={() => setResponse("yes")}
-                className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
-                  response === "yes"
-                    ? "bg-white text-black"
-                    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-                }`}
-              >
-                Accept
-              </button>
              <button
+  onClick={() => {
+    if (!name.trim() || !contact.trim() || contactError) {
+      alert("Please enter a valid Name and 10-digit Contact number before accepting.");
+      return;
+    }
+    setResponse("yes");
+  }}
+  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
+    response === "yes"
+      ? "bg-white text-black"
+      : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+  }`}
+>
+  Accept
+</button>
+
+            <button
   onClick={async () => {
-    if (!name || !contact || contactError) {
+    if (!name.trim() || !contact.trim() || contactError) {
       alert("Please fill in your name and contact number before declining.");
       return;
     }
@@ -247,6 +254,7 @@ function RSVPForm() {
 >
   Decline
 </button>
+
 
             </div>
           </div>
@@ -402,16 +410,16 @@ function RSVPForm() {
   Mode of Transportation
 </div>
             <select
-              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              value={transportMode}
-              onChange={(e) => setTransportMode(e.target.value)}
-              required
-            >
-              
-              <option value="railway">Railway Station</option>
-              <option value="airport">Airport</option>
-              <option value="local">Local</option>
-            </select>
+  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 text-gray-500 focus:text-black focus:outline-none focus:border-black"
+  value={transportMode}
+  onChange={(e) => setTransportMode(e.target.value)}
+  required
+>
+  <option value="railway">Railway Station</option>
+  <option value="airport">Airport</option>
+  <option value="local">Local</option>
+</select>
+
 
             {transportMode === "railway" && (
               <>
