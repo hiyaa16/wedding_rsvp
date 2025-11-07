@@ -1,66 +1,46 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import RSVPForm from "./RSVPForm";
-import { useNavigate } from "react-router-dom";
 import bgImage from "./assets/image5.jpeg";
 
 function RSVPSection() {
   const bgRef = useRef(null);
-  const navigate = useNavigate();
-  const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
+    // This is good practice for preloading, we'll keep it.
     const img = new window.Image();
     img.src = bgImage;
+    img.onload = () => console.log("RSVP background image loaded:", bgImage);
+    img.onerror = () => console.error("Failed to load RSVP background image:", bgImage);
   }, []);
-
-  const handleOptionClick = (option) => {
-    if (option === "upload") {
-      navigate("/upload"); // ✅ this redirects to Upload.jsx
-    } else {
-      setSelectedOption("rsvp");
-    }
-  };
 
   return (
     <div className="relative w-full">
-      {/* Background */}
+      {/* 1. Fixed Background Container */}
       <div
         ref={bgRef}
+        // Tailwind classes: fixed top-0 left-0 w-full h-screen ensure it covers the viewport
         className="fixed top-0 left-0 w-full h-screen bg-cover bg-center z-0"
         style={{ backgroundImage: `url(${bgImage})` }}
       >
-        <div className="absolute inset-0 bg-black/60"></div>
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/70"></div>
       </div>
 
-      {/* Foreground content */}
-      <section
-        id="rsvp"
+      {/* 2. Content Section - This is the main change.
+           We removed the extra <div className="h-screen"></div> which was causing the scroll.
+           The section now uses min-h-screen to ensure it covers the viewport, 
+           and it's absolutely positioned or uses padding/margin to position itself over 
+           the fixed background (thanks to relative/z-10).
+      */}
+      <section 
+        id="rsvp" 
+        // Use 'flex items-center justify-center min-h-screen' to center the form vertically and horizontally.
+        // 'relative z-10' keeps it above the fixed background.
         className="relative z-10 flex items-center justify-center min-h-screen px-4"
       >
-        <div className="max-w-lg w-full text-center p-8 bg-transparent rounded-xl">
-          {!selectedOption ? (
-            <>
-              <h2 className="text-4xl font-bold text-white mb-8">
-                Choose an Option
-              </h2>
-              <div className="flex justify-center gap-6">
-                <button
-                  onClick={() => handleOptionClick("rsvp")}
-                  className="px-6 py-3 border border-white text-white rounded-md hover:bg-white/20 transition"
-                >
-                  RSVP
-                </button>
-                <button
-                  onClick={() => handleOptionClick("upload")}
-                  className="px-6 py-3 border border-white text-white rounded-md hover:bg-white/20 transition"
-                >
-                  Upload Wedding Images
-                </button>
-              </div>
-            </>
-          ) : (
-            <RSVPForm />
-          )}
+        <div className="max-w-lg w-full text-center p-8">
+          {/* This ensures the RSVPForm takes up the center of the screen */}
+          <RSVPForm />
         </div>
       </section>
     </div>

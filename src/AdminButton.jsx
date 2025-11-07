@@ -5,7 +5,8 @@ import { UserCog } from "lucide-react"; // Admin profile icon
 function AdminButton() {
   return (
     <Link
-      to="/rsvp-table"
+      // FIX: Change the route path from "/rsvp-table" to the new parent admin route "/admin"
+      to="/admin" 
       className="fixed bottom-4 right-16 text-white hover:text-pink-500 transition-transform duration-300 hover:scale-110 z-50"
       title="Admin Panel"
     >

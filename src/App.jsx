@@ -11,10 +11,11 @@ import Itinerary from "./Itinerary";
 import OutfitMoodboard from "./OutfitMoodboard";
 import MusicPlayer from "./MusicPlayer";
 import FAQSection from "./FAQSection";
-import ProtectedRoute from "./ProtectedRoute";
-import RSVPTable from "./RSVPTable";
-import AdminButton from "./AdminButton"; // 👈 added
+import ProtectedRoute from "./ProtectedRoute"; 
+// import RSVPTable from "./RSVPTable"; 
+import AdminButton from "./AdminButton";
 import Upload from "./Upload";
+// Note: AdminDashboard component is imported/rendered within ProtectedRoute
 
 function Home() {
   React.useEffect(() => {
@@ -27,7 +28,7 @@ function App() {
   return (
     <Router>
       <MusicPlayer />
-      <AdminButton /> {/* 👈 added */}
+      <AdminButton />
       <Navbar />
 
       <Routes>
@@ -38,15 +39,10 @@ function App() {
         <Route path="/faq" element={<FAQSection />} />
         <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
         <Route path="/rsvp" element={<RSVPSection />} />
-          <Route path="/upload" element={<Upload />} />
-        <Route
-          path="/rsvp-table"
-          element={
-            <ProtectedRoute>
-              <RSVPTable />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/upload" element={<Upload />} />
+        
+        {/* Admin Route: ProtectedRoute handles login and renders AdminDashboard */}
+        <Route path="/admin" element={<ProtectedRoute />} />
       </Routes>
     </Router>
   );

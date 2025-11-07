@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { FaTimes } from 'react-icons/fa';
 import { db } from './firebase';
 
@@ -9,7 +9,7 @@ import wedding2 from './assets/image.jpg';
 import wedding3 from './assets/image8.jpg';
 import wedding4 from './assets/image9.jpg';
 
-// 👉 STEP 1: Add your manual image URLs here (from Cloudinary, Imgur, etc.)
+// Manual Cloudinary images (unchanged)
 const MANUAL_URLS = [
   { id: 'manual-1', url: 'https://res.cloudinary.com/dhkabclgt/image/upload/v1762278672/greendress_llagvn.jpg' },
   { id: 'manual-2', url: 'https://res.cloudinary.com/dhkabclgt/image/upload/v1762278670/dinner_ug4fxp.jpg' },
@@ -21,12 +21,10 @@ const MANUAL_URLS = [
   { id: 'manual-8', url: 'https://res.cloudinary.com/dhkabclgt/image/upload/v1762279405/a_fgqc1m.jpg' },
   { id: 'manual-9', url: 'https://res.cloudinary.com/dhkabclgt/image/upload/v1762279405/food_l71rsd.jpg' },
   { id: 'manual-10', url: 'https://res.cloudinary.com/dhkabclgt/image/upload/v1762279406/image7_pvcwlx.jpg' },
-  
-
-  // 🪄 Add all 20–30 photos like this
+  // Add more if needed
 ];
 
-// 👉 STEP 2: Local static images
+// Static local images (unchanged)
 const STATIC_IMAGES = [
   { id: 'static-1', url: wedding1 },
   { id: 'static-2', url: wedding2 },
@@ -34,12 +32,14 @@ const STATIC_IMAGES = [
   { id: 'static-4', url: wedding4 }
 ];
 
-export default function Gallery() {
+export default function Gallery({ isAdmin }) {
   const [photos, setPhotos] = useState([]);
   const [selectedImg, setSelectedImg] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
-  // Firestore listener (optional — if you ever want to add dynamic images later)
+  // Firestore listener for dynamic images
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'photos'), (snapshot) => {
       const imgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -48,12 +48,50 @@ export default function Gallery() {
     return () => unsubscribe();
   }, []);
 
-  // Combine all image sources — static + manual + Firestore
   const allImages = [...STATIC_IMAGES, ...MANUAL_URLS, ...photos];
+
+  // Admin image upload (Cloudinary -> Firebase)
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) return;
+    setUploading(true);
+
+    // Cloudinary upload part
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "YOUR_CLOUDINARY_PRESET"); // Change to your preset name
+
+    try {
+      const cloudinaryRes = await fetch("https://api.cloudinary.com/v1_1/dhkabclgt/image/upload", {
+        method: "POST",
+        body: data,
+      });
+      const cloudinaryData = await cloudinaryRes.json();
+      const imageUrl = cloudinaryData.secure_url;
+      if (!imageUrl) throw new Error("Cloudinary upload failed");
+      // Store Cloudinary URL in Firebase
+      await addDoc(collection(db, 'photos'), { url: imageUrl });
+      alert("Photo uploaded!");
+      setFile(null);
+    } catch (err) {
+      alert("Upload failed");
+    }
+    setUploading(false);
+  };
+
+  // Admin image delete (Firebase only)
+  const handleDelete = async (photoId) => {
+    try {
+      await deleteDoc(doc(db, 'photos', photoId));
+      alert('Image deleted!');
+    } catch (error) {
+      alert('Delete failed');
+    }
+  };
 
   return (
     <div className="relative">
-      {/* Background */}
+      {/* Gallery background */}
       <div
         style={{
           backgroundImage: `url(${galleryBg})`,
@@ -70,16 +108,34 @@ export default function Gallery() {
         <div className="absolute inset-0 bg-black/50 dark:bg-black/70 z-10"></div>
       </div>
 
-      {/* Content Section */}
+      {/* Content section */}
       <div className="relative z-20 px-3 sm:px-8 md:px-12 pt-20 pb-20">
-        <h1
-          className="text-center text-2xl sm:text-3xl md:text-5xl font-normal text-white drop-shadow-lg mt-12 mb-10"
-          style={{ fontFamily: 'Cinzel Decorative, serif' }}
-        >
+        <h1 className="text-center text-2xl sm:text-3xl md:text-5xl font-normal text-white drop-shadow-lg mt-12 mb-10"
+          style={{ fontFamily: 'Cinzel Decorative, serif' }}>
           Wedding Photo Gallery
         </h1>
 
-        {/* Photo Grid */}
+        {/* Upload form for admin only */}
+        {isAdmin && (
+          <div className="mt-6 mb-3 flex flex-col items-center">
+            <form className="w-full max-w-md bg-white/90 rounded-lg p-4 shadow" onSubmit={handleUpload}>
+              <input
+                type="file"
+                onChange={e => setFile(e.target.files[0])}
+                className="mb-2"
+                accept="image/*"
+              />
+              <button
+                disabled={uploading}
+                className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                {uploading ? "Uploading..." : "Upload Photo"}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Images grid (all images shown, delete only for admin+Firestore) */}
         <div className="max-w-7xl mx-auto bg-white/30 rounded-3xl shadow-xl p-4 backdrop-blur-sm">
           {allImages.length === 0 ? (
             <p className="text-center text-gray-700 text-lg">No wedding photos yet.</p>
@@ -88,7 +144,7 @@ export default function Gallery() {
               {allImages.map((photo) => (
                 <div
                   key={photo.id}
-                  className="rounded-xl shadow hover:shadow-lg transition overflow-hidden bg-white flex flex-col items-center"
+                  className="rounded-xl shadow hover:shadow-lg transition overflow-hidden bg-white flex flex-col items-center relative"
                 >
                   <img
                     src={photo.url}
@@ -100,6 +156,14 @@ export default function Gallery() {
                       setShowModal(true);
                     }}
                   />
+                  {/* Delete button for admin on Firebase images only */}
+                  {isAdmin && photo.id && !photo.id.startsWith('manual-') && !photo.id.startsWith('static-') && (
+                    <button
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full shadow hover:bg-red-700"
+                      onClick={() => handleDelete(photo.id)}
+                      title="Delete Image"
+                    >✕</button>
+                  )}
                 </div>
               ))}
             </div>
@@ -107,7 +171,7 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Modal for Full Image */}
+      {/* Modal for full image display */}
       {showModal && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"

@@ -24,7 +24,7 @@ function Navbar() {
           className={`flex items-center gap-1 text-2xl font-bold font-serif text-white hover:text-pink-400 transition duration-300`}
           onClick={() => setMenuOpen(false)}
         >
-          <img src={LogoImg} alt="Logo" className="h-8 w-8 object-contain" />
+          <img src={LogoImg} alt="Logo" className="h-8 w-10 object-contain" />
           #PattyPulledVipul
         </Link>
 

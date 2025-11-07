@@ -388,13 +388,16 @@ function RSVPForm() {
             </div>
 
             {/* Transport */}
+            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+  Mode of Transportation
+</div>
             <select
               className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
               value={transportMode}
               onChange={(e) => setTransportMode(e.target.value)}
               required
             >
-              <option value="">Mode of Transportation</option>
+              
               <option value="railway">Railway Station</option>
               <option value="airport">Airport</option>
               <option value="local">Local</option>

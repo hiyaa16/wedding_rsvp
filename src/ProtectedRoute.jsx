@@ -1,34 +1,33 @@
 import React, { useState } from "react";
-import bgImage from "./assets/image5.jpeg"; // <-- local image import
+import bgImage from "./assets/image5.jpeg";
+import AdminDashboard from "./AdminDashboard";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
-  const correctPassword = "admin123"; // 🔒 change this
+  const correctPassword = "admin123";
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === correctPassword) {
       setIsAuthenticated(true);
+      setPassword("");
     } else {
       alert("Incorrect password!");
+      setPassword("");
     }
   };
 
   if (isAuthenticated) {
-    return children;
+    return <AdminDashboard isAdmin={true} />;
   }
 
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-      }}
+      style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* optional dark overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-70"></div>
-
       <form
         onSubmit={handleSubmit}
         className="relative bg-white bg-opacity-70 backdrop-blur-md p-10 rounded-2xl shadow-2xl text-center w-80 z-10"
