@@ -2,64 +2,56 @@ import React, { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
 import { db } from './firebase';
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import storyBg from "/assets/image5.jpeg";
-import image2018 from "/assets/s1.jpg";
-import image2019 from "/assets/s2.jpg";
-import image2020 from "/assets/s3.jpg";
-import image2021 from "/assets/s4.jpg";
-import image2022 from "/assets/s5.jpg";
-import image2023 from "/assets/s6.jpg";
-import image2024 from "/assets/s8.jpg";
 
-// Default milestones so, if firestore empty, kuch dikhe
+// Milestone images: Use direct string path (public/assets/s1.jpg etc)
 const defaultMilestones = [
   {
     year: "2018",
     title: "The First Hello",
     location: "München, Germany",
     story: "They first met on February 14, 2018, in a university dorm. What started as casual hellos in the hallway slowly turned into longer conversations. Neither knew it then, but this chance encounter would change everything.",
-    image: image2018,
+    image: "/assets/s1.jpg",
   },
   {
     year: "2019",
     title: "Coffee Dates & Deep Talks",
     location: "Munich, Germany",
     story: "By 2019, those hallway hellos had become regular coffee dates. They discovered shared dreams, laughed at the same jokes, and found comfort in each other's company. What began as friendship was quietly becoming something more.",
-    image: image2019,
+    image: "/assets/s2.jpg",
   },
   {
     year: "2020",
     title: "Love in the Time of Lockdown",
     location: "Virtual dates across time zones",
     story: "When COVID-19 hit, distance became their biggest challenge. Video calls replaced coffee dates, and timezone differences meant stolen moments whenever they could. But love found a way—every call, every message, every 'goodnight' across continents only made their bond stronger.",
-    image: image2020,
+    image: "/assets/s3.jpg",
   },
   {
     year: "2021",
     title: "Finally Together Again",
     location: "Germany & Beyond",
     story: "As the world slowly reopened, they made up for lost time. From exploring Germany to holiday trips, every moment together felt like a celebration. They had survived distance; now they were ready to build a future.",
-    image: image2021,
+    image: "/assets/s4.jpg",
   },
   {
     year: "2022",
     title: "Adventures & New Beginnings",
     location: "California & Beyond",
     story: "Life took them to new places and new adventures. From California beaches to new experiences, they tackled everything as a team. Every challenge, every joy—they faced it together, stronger than ever.",
-    image: image2022,
+    image: "/assets/s5.jpg",
   },
   {
     year: "2023",
     title: "The Beginning of Forever",
     location: "India",
     story: "Patty got down on one knee and asked Vipul to spend forever together. With tears of joy and hearts full of love, they said yes to a lifetime of adventures, laughter, and endless love. The best chapter was just beginning.",
-    image: image2023,
+    image: "/assets/s6.jpg",
   },
   {
     year: "2024",
     title: "The Journey to 'I Do'",
     story: "From planning their dream destination wedding in Jodhpur to sharing this special moment with their loved ones, every detail has been chosen with love. As they prepare to exchange vows, they're grateful for every twist and turn that brought them here—to this moment, to this love, to each other.",
-    image: image2024,
+    image: "/assets/s8.jpg",
   },
 ];
 
@@ -77,7 +69,6 @@ export default function OurStory({ isAdmin }) {
       if (snapshot.exists()) setMilestones(snapshot.data().milestones);
     }
     fetchStory();
-    // eslint-disable-next-line
   }, []);
 
   // Start editing
@@ -100,20 +91,15 @@ export default function OurStory({ isAdmin }) {
   return (
     <div
       className="relative min-h-screen bg-fixed bg-center bg-cover"
-      style={{ backgroundImage: `url(${storyBg})` }}
+      style={{ backgroundImage: `url(/assets/image5.jpeg)` }} // Place image5.jpeg in public/assets/
     >
       <div className="absolute inset-0 bg-black/60 z-10"></div>
       <header className="text-center py-24 text-white relative z-10">
-        <h1
-          className="text-4xl md:text-6xl font-bold drop-shadow-lg mb-6"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
+        <h1 className="text-4xl md:text-6xl font-bold drop-shadow-lg mb-6"
+          style={{ fontFamily: "'Playfair Display', serif" }}>
           How It All Began
         </h1>
-        <p
-          className="mt-3 text-lg text-gray-200"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
+        <p className="mt-3 text-lg text-gray-200" style={{ fontFamily: "'Inter', sans-serif" }}>
           The journey of Vipul & Patty
         </p>
         <div className="mx-auto mt-5 w-24 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
@@ -162,7 +148,7 @@ export default function OurStory({ isAdmin }) {
             </div>
           </section>
         ))}
-        {/* Final Wedding Card section (optional editable) */}
+        {/* Final Wedding Card section (not editable) */}
         <section className="relative flex items-center justify-center py-16 mt-10">
           <div className="absolute inset-0 rounded-2xl"></div>
           <div className="relative z-10 max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-10 text-center">
