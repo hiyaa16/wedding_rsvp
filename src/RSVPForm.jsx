@@ -137,7 +137,7 @@ function RSVPForm() {
 
   return (
     <div
-      className="w-full sm:w-[550px] mx-auto px-8 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-cover bg-center bg-no-repeat"
+      className="w-full sm:w-[550px] mx-auto px-8 py-4 text-center shadow-3xl flex flex-col items-center relative overflow-hidden mt-10 mb-10 rounded-t-full transition-all duration-500 ease-in-out bg-cover bg-center bg-no-repeat"
       style={{
         minHeight: isMobile
           ? response
@@ -346,46 +346,56 @@ function RSVPForm() {
             )}
 
             {/* Arrival */}
-            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-              Enter arrival date and time in Jodhpur
-            </div>
-            <div className="flex gap-4 flex-col sm:flex-row">
-              <input
-                type="date"
-                value={arrivalDate}
-                onChange={(e) => setArrivalDate(e.target.value)}
-                required
-                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              />
-              <input
-                type="time"
-                value={arrivalTime}
-                onChange={(e) => setArrivalTime(e.target.value)}
-                required
-                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              />
-            </div>
+         
 
-            {/* Departure */}
-            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-              Enter departure date and time from Jodhpur
-            </div>
-            <div className="flex gap-4 flex-col sm:flex-row">
-              <input
-                type="date"
-                value={departureDate}
-                onChange={(e) => setDepartureDate(e.target.value)}
-                required
-                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              />
-              <input
-                type="time"
-                value={departureTime}
-                onChange={(e) => setDepartureTime(e.target.value)}
-                required
-                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              />
-            </div>
+{/* --- Arrival Date/Time --- */}
+<div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+  Enter arrival date and time in Jodhpur
+</div>
+<div className="flex gap-4 flex-col sm:flex-row">
+  <select
+    value={arrivalDate}
+    onChange={e => setArrivalDate(e.target.value)}
+    required
+    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+  >
+    <option value="">Select Date</option>
+    <option value="2026-02-20">20 Feb 2026</option>
+    <option value="2026-02-21">21 Feb 2026</option>
+  </select>
+  <input
+    type="time"
+    value={arrivalTime}
+    onChange={e => setArrivalTime(e.target.value)}
+    required
+    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+  />
+</div>
+
+{/* --- Departure Date/Time --- */}
+<div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+  Enter departure date and time from Jodhpur
+</div>
+<div className="flex gap-4 flex-col sm:flex-row">
+  <select
+    value={departureDate}
+    onChange={e => setDepartureDate(e.target.value)}
+    required
+    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+  >
+    <option value="">Select Date</option>
+    <option value="2026-02-21">21 Feb 2026</option>
+    <option value="2026-02-22">22 Feb 2026</option>
+  </select>
+  <input
+    type="time"
+    value={departureTime}
+    onChange={e => setDepartureTime(e.target.value)}
+    required
+    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+  />
+</div>
+
 
             {/* Transport */}
             <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
@@ -484,7 +494,7 @@ function RSVPForm() {
             <button
               type="submit"
               disabled={!!contactError}
-              className="w-40 mt-6 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50"
+              className="w-40   mt-4 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50"
             >
               Submit
             </button>

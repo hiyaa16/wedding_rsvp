@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 import { db } from './firebase';
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-// Milestone images: Use direct string path (public/assets/s1.jpg etc)
+// Images ka koi import nahi, sirf string path via public/assets
 const defaultMilestones = [
   {
     year: "2018",
@@ -61,27 +61,33 @@ export default function OurStory({ isAdmin }) {
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
 
-  // Firestore se milestones fetch karo
+  // Milestone loader: Firestore ke image string path ko force karo
   useEffect(() => {
     async function fetchStory() {
       const docRef = doc(db, "ourstory", "main");
       const snapshot = await getDoc(docRef);
-      if (snapshot.exists()) setMilestones(snapshot.data().milestones);
+      if (snapshot.exists()) {
+        // Ensure every milestone.image is forced string
+        const arr = (snapshot.data().milestones || []).map(m =>
+          typeof m.image === "string" ? m : { ...m, image: defaultMilestones.find(d => d.year === m.year)?.image || "" }
+        );
+        setMilestones(arr);
+      }
     }
     fetchStory();
   }, []);
 
-  // Start editing
   const startEdit = i => {
     setEditingIdx(i);
     setEditForm({ ...milestones[i] });
   };
 
-  // Save edit to Firestore
+  // Save edit to Firestore: Only text, keep image string unchanged
   const saveEdit = async () => {
     setSaving(true);
     const newMilestones = milestones.slice();
-    newMilestones[editingIdx] = { ...editForm };
+    // Always keep previous image string, never undefined/object
+    newMilestones[editingIdx] = { ...editForm, image: milestones[editingIdx].image || defaultMilestones[editingIdx].image };
     setMilestones(newMilestones);
     await setDoc(doc(db, "ourstory", "main"), { milestones: newMilestones });
     setEditingIdx(null);
@@ -91,7 +97,7 @@ export default function OurStory({ isAdmin }) {
   return (
     <div
       className="relative min-h-screen bg-fixed bg-center bg-cover"
-      style={{ backgroundImage: `url(/assets/image5.jpeg)` }} // Place image5.jpeg in public/assets/
+      style={{ backgroundImage: `url(/assets/image5.jpeg)` }}
     >
       <div className="absolute inset-0 bg-black/60 z-10"></div>
       <header className="text-center py-24 text-white relative z-10">
@@ -136,7 +142,7 @@ export default function OurStory({ isAdmin }) {
                     {m.story}
                   </p>
                   <div className="overflow-hidden rounded-xl w-full">
-                    <img src={m.image} alt={m.title} className="w-full h-auto max-h-[450px] md:max-h-[350px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105" />
+                    <img src={typeof m.image === "string" ? m.image : ""} alt={m.title} className="w-full h-auto max-h-[450px] md:max-h-[350px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   {isAdmin && (
                     <button className="mt-3 px-4 py-2 bg-blue-600 text-white rounded" onClick={() => startEdit(i)}>
