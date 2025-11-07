@@ -40,7 +40,7 @@ function OutfitMoodboard() {
   const CENTER_SCALE = window.innerWidth < 1200 ? 1.3 : 1.5;
   const SIDE_SCALE = 0.6;
   const SIDE_OFFSET = window.innerWidth < 1200 ? 200 : 250;
-  const CARD_BASE_WIDTH = window.innerWidth < 1200 ? "25%" : "34%";
+  const CARD_BASE_WIDTH = window.innerWidth < 1200 ? "25%" : "30%";
 
   return (
     <div
