@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImage from "./assets/image5.jpeg";
+import bgImage from "/assets/image5.jpeg";
 import AdminDashboard from "./AdminDashboard";
 
 function ProtectedRoute() {

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import RSVPForm from "./RSVPForm";
-import bgImage from "./assets/image5.jpeg";
+import bgImage from "/assets/image5.jpeg";
 
 function RSVPSection() {
   const bgRef = useRef(null);

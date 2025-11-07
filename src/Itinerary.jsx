@@ -1,11 +1,11 @@
 import React from "react";
 
 // Assuming you have a background image asset named itiBg
-import itiBg from "./assets/image5.jpeg"; 
-import image1 from "./assets/iti1.png";
-import image2 from "./assets/iti2.png";
-import image3 from "./assets/iti3.png";
-import image4 from "./assets/iti4.png";
+import itiBg from "/assets/image5.jpeg"; 
+import image1 from "/assets/iti1.png";
+import image2 from "/assets/iti2.png";
+import image3 from "/assets/iti3.png";
+import image4 from "/assets/iti4.png";
 
 function Itinerary() {
   return (

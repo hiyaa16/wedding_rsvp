@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "./assets/image5.jpeg";
+import bgImage from "/assets/image5.jpeg";
 import { collection, addDoc } from "firebase/firestore";
-import bg from "./assets/rsvpbg.jpg";
+import bg from "/assets/rsvpbg.jpg";
 import { db } from "./firebase";
 
 const COUNTRY_CODES = [

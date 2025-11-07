@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // 1. ✅ Import your background image here
-import faqBg from "./assets/image5.jpeg"; // <--- Make sure this path is correct
+import faqBg from "/assets/image5.jpeg"; // <--- Make sure this path is correct
 
 const faqData = [
   {

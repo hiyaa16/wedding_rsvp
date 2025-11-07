@@ -3,11 +3,11 @@ import { collection, addDoc, onSnapshot, deleteDoc, doc } from 'firebase/firesto
 import { FaTimes } from 'react-icons/fa';
 import { db } from './firebase';
 
-import galleryBg from './assets/image5.jpeg';
-import wedding1 from './assets/image3.jpg';
-import wedding2 from './assets/image.jpg';
-import wedding3 from './assets/image8.jpg';
-import wedding4 from './assets/image9.jpg';
+import galleryBg from '/assets/image5.jpeg';
+import wedding1 from '/assets/image3.jpg';
+import wedding2 from '/assets/image.jpg';
+import wedding3 from '/assets/image8.jpg';
+import wedding4 from '/assets/image9.jpg';
 
 // Manual Cloudinary images (unchanged)
 const MANUAL_URLS = [

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import song from "./assets/music.mp3";
+import song from "/assets/music.mp3";
 
 function MusicPlayer() {
   const audioRef = useRef(null);

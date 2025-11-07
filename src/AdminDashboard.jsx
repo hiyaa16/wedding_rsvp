@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImage from "./assets/image5.jpeg";
+import bgImage from "/assets/image5.jpeg";
 import RSVPTable from "./RSVPTable";
 import Gallery from "./Gallery";
 import OurStory from "./OurStory";

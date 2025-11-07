@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import img1 from "./assets/1st.jpg";
-import img8 from "./assets/image3.jpeg";
-import img3 from "./assets/catfam.jpg";
-import img4 from "./assets/dinner.jpg"
-import img5 from "./assets/holdhand.jpg"
-import img6 from "./assets/married.jpg"
-import img7 from "./assets/main.jpg"
-import img2 from "./assets/greendress.jpeg"
+import img1 from "/assets/1st.jpg";
+import img8 from "/assets/image3.jpeg";
+import img3 from "/assets/catfam.jpg";
+import img4 from "/assets/dinner.jpg"
+import img5 from "/assets/holdhand.jpg"
+import img6 from "/assets/married.jpg"
+import img7 from "/assets/main.jpg"
+import img2 from "/assets/greendress.jpeg"
 
 function getTimeRemaining(targetDate) {
   const now = new Date();

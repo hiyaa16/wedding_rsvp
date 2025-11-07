@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import bgImage from "./assets/image5.jpeg";
-import carouselImage1 from "./assets/Wardrobe Planner/1.png";
-import carouselImage2 from "./assets/Wardrobe Planner/2.png";
-import carouselImage3 from "./assets/Wardrobe Planner/3.png";
-import carouselImage4 from "./assets/Wardrobe Planner/4.png";
-import carouselImage5 from "./assets/Wardrobe Planner/5.png";
-import carouselImage6 from "./assets/Wardrobe Planner/6.png";
+import bgImage from "/assets/image5.jpeg";
+import carouselImage1 from "/assets/Wardrobe Planner/1.png";
+import carouselImage2 from "/assets/Wardrobe Planner/2.png";
+import carouselImage3 from "/assets/Wardrobe Planner/3.png";
+import carouselImage4 from "/assets/Wardrobe Planner/4.png";
+import carouselImage5 from "/assets/Wardrobe Planner/5.png";
+import carouselImage6 from "/assets/Wardrobe Planner/6.png";
 
 const carouselImages = [
   { src: carouselImage1 },

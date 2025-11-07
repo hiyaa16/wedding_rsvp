@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
 import { db } from './firebase';
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import storyBg from "./assets/image5.jpeg";
-import image2018 from "./assets/s1.jpg";
-import image2019 from "./assets/s2.jpg";
-import image2020 from "./assets/s3.jpg";
-import image2021 from "./assets/s4.jpg";
-import image2022 from "./assets/s5.jpg";
-import image2023 from "./assets/s6.jpg";
-import image2024 from "./assets/s8.jpg";
+import storyBg from "/assets/image5.jpeg";
+import image2018 from "/assets/s1.jpg";
+import image2019 from "/assets/s2.jpg";
+import image2020 from "/assets/s3.jpg";
+import image2021 from "/assets/s4.jpg";
+import image2022 from "/assets/s5.jpg";
+import image2023 from "/assets/s6.jpg";
+import image2024 from "/assets/s8.jpg";
 
 // Default milestones so, if firestore empty, kuch dikhe
 const defaultMilestones = [

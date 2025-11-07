@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "./assets/image5.jpeg";
+import bgImage from "/assets/image5.jpeg";
 import { db } from "./firebase";
 import { collection, addDoc, getDocs, orderBy, query } from "firebase/firestore";
 
