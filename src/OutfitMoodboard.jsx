@@ -40,7 +40,7 @@ function OutfitMoodboard() {
   const CENTER_SCALE = window.innerWidth < 1200 ? 1.3 : 1.5;
   const SIDE_SCALE = 0.6;
   const SIDE_OFFSET = window.innerWidth < 1200 ? 200 : 250;
-  const CARD_BASE_WIDTH = window.innerWidth < 1200 ? "30%" : "34%";
+  const CARD_BASE_WIDTH = window.innerWidth < 1200 ? "25%" : "34%";
 
   return (
     <div
@@ -140,7 +140,7 @@ function OutfitMoodboard() {
             return (
               <div
                 key={index}
-                className="absolute h-[50%] sm:h-[65%] md:h-[70%] lg:h-[80%] overflow-hidden cursor-pointer rounded-xl shadow-2xl"
+                className="absolute h-[50%] sm:h-[65%] md:h-[70%] lg:h-[80%] overflow-hidden cursor-pointer l"
                 style={{
                   width: CARD_BASE_WIDTH,
                   zIndex,
