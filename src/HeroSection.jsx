@@ -83,30 +83,40 @@ function HeroSection() {
         </div>
 
         {/* SMALLER COUNTDOWN BOX */}
-        <div className="mt-6 flex flex-col items-center">
-          <div className="bg-white bg-opacity-90 rounded-lg shadow-md px-3 py-2 flex gap-3 md:gap-5">
-            <div className="flex flex-col items-center">
-              <span className="text-lg md:text-2xl font-bold text-gray-800">{countdown.days}</span>
-              <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">DAYS</span>
-            </div>
-            <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.hours).padStart(2, "0")}</span>
-              <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">HOURS</span>
-            </div>
-            <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.minutes).padStart(2, "0")}</span>
-              <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">MINS</span>
-            </div>
-            <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.seconds).padStart(2, "0")}</span>
-              <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">SECONDS</span>
-            </div>
-          </div>
-          <div className="mt-5 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">to go...</div>
-        </div>
+      {/* SMALLER COUNTDOWN BOX */}
+<div className="mt-6 flex flex-col items-center w-full relative">
+  {/* Countdown Box */}
+  <div className="bg-white bg-opacity-90 rounded-lg shadow-md px-3 py-2 flex gap-3 md:gap-5 transform md:-translate-x-8">
+    {/* Countdown Values */}
+    <div className="flex flex-col items-center">
+      <span className="text-lg md:text-2xl font-bold text-gray-800">{countdown.days}</span>
+      <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">DAYS</span>
+    </div>
+    <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
+    <div className="flex flex-col items-center">
+      <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.hours).padStart(2, "0")}</span>
+      <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">HOURS</span>
+    </div>
+    <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
+    <div className="flex flex-col items-center">
+      <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.minutes).padStart(2, "0")}</span>
+      <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">MINS</span>
+    </div>
+    <span className="text-base md:text-xl text-gray-600 flex items-end">:</span>
+    <div className="flex flex-col items-center">
+      <span className="text-lg md:text-2xl font-bold text-gray-800">{String(countdown.seconds).padStart(2, "0")}</span>
+      <span className="text-[9px] md:text-xs font-semibold text-gray-500 mt-0.5 tracking-widest">SECONDS</span>
+    </div>
+  </div>
+
+  {/* "To go..." centered under shifted box */}
+  <div className="absolute left-1/2 md:left-[calc(50%-2rem)] transform -translate-x-1/2 mt-16 text-2xl sm:text-3xl font-semibold text-white drop-shadow-lg tracking-wider">
+    to go...
+  </div>
+</div>
+
+
+
       </div>
 
       {/* Indicator Dots */}

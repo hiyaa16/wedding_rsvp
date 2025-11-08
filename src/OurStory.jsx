@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 import { db } from './firebase';
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-// Images ka koi import nahi, sirf string path via public/assets
+// Images are linked by string path via public/assets
 const defaultMilestones = [
   {
     year: "2018",
@@ -53,6 +53,13 @@ const defaultMilestones = [
     story: "From planning their dream destination wedding in Jodhpur to sharing this special moment with their loved ones, every detail has been chosen with love. As they prepare to exchange vows, they're grateful for every twist and turn that brought them here—to this moment, to this love, to each other.",
     image: "/assets/s8.jpg",
   },
+   {
+    year: "2025",
+    title: "To be added",
+    location: "To be added",
+    story: "To be added",
+    image: "/assets/s9.jpg",
+  },
 ];
 
 export default function OurStory({ isAdmin }) {
@@ -61,32 +68,48 @@ export default function OurStory({ isAdmin }) {
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
 
-  // Milestone loader: Firestore ke image string path ko force karo
   useEffect(() => {
-    async function fetchStory() {
-      const docRef = doc(db, "ourstory", "main");
-      const snapshot = await getDoc(docRef);
-      if (snapshot.exists()) {
-        // Ensure every milestone.image is forced string
-        const arr = (snapshot.data().milestones || []).map(m =>
-          typeof m.image === "string" ? m : { ...m, image: defaultMilestones.find(d => d.year === m.year)?.image || "" }
-        );
-        setMilestones(arr);
+  async function fetchStory() {
+    const docRef = doc(db, "ourstory", "main");
+    const snapshot = await getDoc(docRef);
+
+    if (snapshot.exists()) {
+      let arr = snapshot.data().milestones || [];
+
+      // 🔍 Check if 2025 milestone already exists
+      const has2025 = arr.some(m => m.year === "2025");
+
+      // 🆕 If not, add it without touching the rest
+      if (!has2025) {
+        arr.push({
+          year: "2025",
+          title: "To be added",
+          location: "To be added",
+          story: "To be added",
+          image: "/assets/s9.jpg",
+        });
+
+        await setDoc(docRef, { milestones: arr }); // update DB with new one
       }
+
+      setMilestones(arr);
+    } else {
+      console.warn("No existing story found in Firestore.");
     }
-    fetchStory();
-  }, []);
+  }
+
+  fetchStory();
+}, []);
+
 
   const startEdit = i => {
     setEditingIdx(i);
     setEditForm({ ...milestones[i] });
   };
 
-  // Save edit to Firestore: Only text, keep image string unchanged
   const saveEdit = async () => {
     setSaving(true);
     const newMilestones = milestones.slice();
-    // Always keep previous image string, never undefined/object
     newMilestones[editingIdx] = { ...editForm, image: milestones[editingIdx].image || defaultMilestones[editingIdx].image };
     setMilestones(newMilestones);
     await setDoc(doc(db, "ourstory", "main"), { milestones: newMilestones });
@@ -113,6 +136,15 @@ export default function OurStory({ isAdmin }) {
       <main className="relative z-10 max-w-6xl mx-auto px-6 pb-20 flex flex-col items-center">
         {milestones.map((m, i) => (
           <section key={i} className="flex flex-col items-center text-center gap-6 mb-20 group transition-transform w-full md:w-[75%]">
+            {/* Logo above "2018" year for the first milestone only */}
+            {i === 0 && (
+              <img
+                src="/logo.png"
+                alt="Wedding Logo"
+                className="mb-2 h-16 sm:h-20 md:h-20 w-auto"
+                style={{ maxWidth: '90vw', marginTop: '-4rem' }}
+              />
+            )}
             <div className="text-4xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
               {m.year}
             </div>

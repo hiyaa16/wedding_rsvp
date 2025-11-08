@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 // Apna logo image import karo (agar local file hai):
- import LogoImg from "/assets/logo.png"; // <-- Apni logo image ka actual path lagao
+ import LogoImg from "/public/logo.png"; // <-- Apni logo image ka actual path lagao
 
 function Navbar() {
   const location = useLocation();

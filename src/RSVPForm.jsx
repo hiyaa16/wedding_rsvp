@@ -3,14 +3,22 @@ import bgImage from "/assets/image5.jpeg";
 import { collection, addDoc } from "firebase/firestore";
 import bg from "/assets/rsvpbg.jpg";
 import { db } from "./firebase";
+import Select from "react-select";
+import * as countryCodes from "country-codes-list";
 
-const COUNTRY_CODES = [
-  { code: "+91", label: "India" },
-  { code: "+1", label: "USA" },
-  { code: "+44", label: "UK" },
-  { code: "+971", label: "UAE" },
-  { code: "+61", label: "Australia" },
-];
+// Generate all country codes automatically
+
+
+const COUNTRY_CODES = Object.entries(
+  countryCodes.customList("countryCode", "{countryNameEn} (+{countryCallingCode})")
+).map(([_, value]) => {
+  const match = value.match(/\(\+(\d+)\)/);
+  const code = match ? `+${match[1]}` : "";
+  const name = value.replace(/\s*\(\+\d+\)/, "").trim();
+  return { code, label: `${name} (${code})` };
+});
+
+
 
 function RSVPForm() {
   const [response, setResponse] = useState("");
@@ -153,17 +161,24 @@ function RSVPForm() {
 
       <div className="relative z-10 w-full">
         <h2
-          className="text-4xl sm:mb-10 mt-10 font-bold tracking-wide text-white drop-shadow-lg"
+          className="text-4xl sm:mb-8 mt-10 font-bold tracking-wide text-white drop-shadow-lg"
           style={{ fontFamily: "serif" }}
         >
           RSVP
         </h2>
+        <img
+  src="/logo.png"
+  alt="Wedding Logo"
+  className="mx-auto mt-3 h-14 sm:h-16 md:h-20 w-auto"
+  style={{ maxWidth: '90vw' }}
+/>
+
 
         {/* Step 1 - Name + Contact */}
         {!response && (
           <div
             className={`w-full space-y-6 transition-all duration-500 ${
-              response === "" ? "mt-24" : "mt-10"
+              response === "" ? "mt-8" : "mt-4"
             }`}
           >
             {/* Smaller Name Field */}
@@ -177,30 +192,56 @@ function RSVPForm() {
             />
 
             {/* Contact */}
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center">
-              <select
-                className="w-full sm:w-auto p-3 rounded-full sm:rounded-l-full sm:rounded-r-none font-serif bg-white bg-opacity-90 shadow border sm:border-r-0 border-gray-300 focus:border-black focus:outline-none"
-                value={countryCode}
-                onChange={(e) => setCountryCode(e.target.value)}
-                required
-              >
-                {COUNTRY_CODES.map(({ code, label }) => (
-                  <option key={code} value={code}>
-                    {code} {label}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="Contact Number"
-                maxLength={10}
-                value={contact}
-                onChange={handleContactChange}
-                required
-                className="flex-1 w-full p-3 rounded-full sm:rounded-r-full sm:rounded-l-none font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-              />
-            </div>
+       <div className="flex w-full items-center space-x-2">
+  <div className="w-full sm:w-40">
+    <Select
+      options={COUNTRY_CODES.map(({ code, label }) => ({
+        value: code,
+        label: label,
+      }))}
+      value={{
+        value: countryCode,
+        label: COUNTRY_CODES.find((c) => c.code === countryCode)?.label,
+      }}
+      onChange={(option) => setCountryCode(option.value)}
+      isSearchable={true}
+      className="font-serif text-sm"
+      styles={{
+        control: (base) => ({
+          ...base,
+          borderRadius: '9999px',
+          backgroundColor: 'rgba(255,255,255,0.9)',
+          borderColor: '#d1d5db',
+          boxShadow: 'none',
+          minHeight: '46px',
+          width: '100%',
+        }),
+        menu: (base) => ({
+          ...base,
+          zIndex: 9999,
+          fontSize: '0.9rem',
+          width: '100%',
+        }),
+        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+      }}
+      menuPortalTarget={document.body} // fixes clipping
+    />
+  </div>
+
+  {/* Contact Number Input */}
+  <input
+    type="text"
+    inputMode="numeric"
+    placeholder="Contact Number"
+    maxLength={10}
+    value={contact}
+    onChange={handleContactChange}
+    required
+    className="w-full sm:flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+  />
+</div>
+
+
             {contactError && (
               <div className="text-red-400 text-left ml-2 text-sm">
                 {contactError}
@@ -217,11 +258,12 @@ function RSVPForm() {
     }
     setResponse("yes");
   }}
-  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
-    response === "yes"
-      ? "bg-white text-black"
-      : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-  }`}
+  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
+  response === "yes"
+    ? "bg-white text-black"
+    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+}`}
+
 >
   Accept
 </button>
@@ -246,7 +288,8 @@ function RSVPForm() {
       alert("Error saving RSVP. Please try again.");
     }
   }}
-  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-20 ${
+    className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
+
     response === "no"
       ? "bg-white text-black"
       : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
@@ -415,8 +458,8 @@ function RSVPForm() {
   onChange={(e) => setTransportMode(e.target.value)}
   required
 >
-  <option value="railway">Railway Station</option>
   <option value="airport">Airport</option>
+  <option value="railway">Railway Station</option>
   <option value="local">Local</option>
 </select>
 

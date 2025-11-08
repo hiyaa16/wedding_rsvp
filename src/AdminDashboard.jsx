@@ -22,7 +22,8 @@ function AdminDashboard({ isAdmin }) {
           </div>
         );
       case "gallery":
-        return <Gallery isAdmin={isAdmin} />;
+  return <Gallery isAdmin={isAdmin} goBack={() => setActiveScreen("menu")} />;
+
       case "story":
         return <OurStory isAdmin={isAdmin} />;
       case "menu":
