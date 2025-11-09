@@ -187,26 +187,96 @@ function Invitation() {
 
       {/* Fullscreen Modal */}
       {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <img
-            src={carouselImages[activeImageIndex].src}
-            alt="Full Invitation"
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
-          />
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsModalOpen(false);
-            }}
-            className="absolute top-5 right-5 text-white text-3xl font-bold"
-          >
-            ×
-          </button>
-        </div>
-      )}
+  <div
+    className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+    onTouchStart={(e) => (window._touchStartX = e.touches[0].clientX)}
+    onTouchEnd={(e) => {
+      const endX = e.changedTouches[0].clientX;
+      const diff = endX - window._touchStartX;
+      if (diff > 50) {
+        // Swipe right → previous
+        setActiveImageIndex((prev) =>
+          prev === 0 ? totalSlides - 1 : prev - 1
+        );
+      } else if (diff < -50) {
+        // Swipe left → next
+        setActiveImageIndex((prev) =>
+          prev === totalSlides - 1 ? 0 : prev + 1
+        );
+      }
+    }}
+  >
+    {/* Close Button */}
+    <button
+      onClick={() => setIsModalOpen(false)}
+      className="absolute top-4 right-5 text-white text-4xl font-bold hover:text-gray-300"
+    >
+      ×
+    </button>
+
+    {/* Left Arrow */}
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        setActiveImageIndex((prev) =>
+          prev === 0 ? totalSlides - 1 : prev - 1
+        );
+      }}
+      className="absolute left-3 md:left-10 text-white hover:text-gray-300"
+      aria-label="Previous Image"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-10 w-10 md:h-12 md:w-12"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+
+    {/* Fullscreen Image */}
+    <img
+      src={carouselImages[activeImageIndex].src}
+      alt={`Invitation page ${activeImageIndex + 1}`}
+      className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl transition-all duration-500"
+    />
+
+    {/* Right Arrow */}
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        setActiveImageIndex((prev) =>
+          prev === totalSlides - 1 ? 0 : prev + 1
+        );
+      }}
+      className="absolute right-3 md:right-10 text-white hover:text-gray-300"
+      aria-label="Next Image"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-10 w-10 md:h-12 md:w-12"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
+  </div>
+)}
+
     </div>
   );
 }
