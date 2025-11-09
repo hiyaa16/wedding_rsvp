@@ -76,7 +76,7 @@ function Itinerary() {
           className="mt-24 sm:mt-20 md:mt-24 text-xl sm:text-3xl md:text-5xl font-light tracking-tight mb-4 drop-shadow-lg leading-tight px-2"
           style={{ fontFamily: "Cinzel Decorative, serif" }}
         >
-          Our Wedding Wardrobe Planner
+         Itinerary
         </h1>
 
         {/* Carousel Container */}
