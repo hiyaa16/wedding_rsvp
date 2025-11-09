@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import bgImage from "/assets/image5.jpeg";
-import carouselImage1 from "/assets/VP_page0001.jpg";
-import carouselImage2 from "/assets/VP_page0002.jpg";
-import carouselImage3 from "/assets/VP_page0003.jpg";
-import carouselImage4 from "/assets/VP_page0004.jpg";
-import carouselImage5 from "/assets/VP_page0005.jpg";
-import carouselImage6 from "/assets/VP_page0006.jpg";
-import carouselImage7 from "/assets/VP_page0007.jpg";
-import carouselImage8 from "/assets/VP_page0008.jpg";
-import carouselImage9 from "/assets/VP_page0009.jpg";
-import carouselImage10 from "/assets/VP_page00010.jpg";
+import bgImage from "public/assets/image5.jpeg";
+import carouselImage1 from "public/assets/VP_page0001.jpg";
+import carouselImage2 from "public/assets/VP_page0002.jpg";
+import carouselImage3 from "public/assets/VP_page0003.jpg";
+import carouselImage4 from "public/assets/VP_page0004.jpg";
+import carouselImage5 from "public/assets/VP_page0005.jpg";
+import carouselImage6 from "public/assets/VP_page0006.jpg";
+import carouselImage7 from "public/assets/VP_page0007.jpg";
+import carouselImage8 from "public/assets/VP_page0008.jpg";
+import carouselImage9 from "public/assets/VP_page0009.jpg";
+import carouselImage10 from "public/assets/VP_page00010.jpg";
 
 const carouselImages = [
   { src: carouselImage1 },
