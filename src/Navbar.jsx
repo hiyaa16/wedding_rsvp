@@ -113,6 +113,16 @@ function Navbar() {
             </Link>
           </li>
           <li>
+  <Link
+    to="/invitation"
+    className={menuOpen ? mobileLinkColor : desktopTextColor}
+    onClick={() => setMenuOpen(false)}
+  >
+    Invitation
+  </Link>
+</li>
+
+          <li>
             <Link
               to="/rsvp"
               className={menuOpen ? mobileLinkColor : desktopTextColor}

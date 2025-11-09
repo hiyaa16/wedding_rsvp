@@ -11,11 +11,10 @@ import Itinerary from "./Itinerary";
 import OutfitMoodboard from "./OutfitMoodboard";
 import MusicPlayer from "./MusicPlayer";
 import FAQSection from "./FAQSection";
-import ProtectedRoute from "./ProtectedRoute"; 
-// import RSVPTable from "./RSVPTable"; 
+import ProtectedRoute from "./ProtectedRoute";
 import AdminButton from "./AdminButton";
 import Upload from "./Upload";
-// Note: AdminDashboard component is imported/rendered within ProtectedRoute
+import Invitation from "./Invitation";  // ✅ NEW IMPORT
 
 function Home() {
   React.useEffect(() => {
@@ -27,26 +26,26 @@ function Home() {
 function App() {
   return (
     <>
-     <MusicPlayer />
-    <Router>
-    
-      <AdminButton />
-      <Navbar />
+      <MusicPlayer />
+      <Router>
+        <AdminButton />
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/our-story" element={<OurStory />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/itinerary" element={<Itinerary />} />
-        <Route path="/faq" element={<FAQSection />} />
-        <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
-        <Route path="/rsvp" element={<RSVPSection />} />
-        <Route path="/upload" element={<Upload />} />
-        
-        {/* Admin Route: ProtectedRoute handles login and renders AdminDashboard */}
-        <Route path="/admin" element={<ProtectedRoute />} />
-      </Routes>
-    </Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/our-story" element={<OurStory />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/itinerary" element={<Itinerary />} />
+          <Route path="/faq" element={<FAQSection />} />
+          <Route path="/outfit-moodboard" element={<OutfitMoodboard />} />
+          <Route path="/rsvp" element={<RSVPSection />} />
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/invitation" element={<Invitation />} />  {/* ✅ NEW ROUTE */}
+          
+          {/* Admin Route */}
+          <Route path="/admin" element={<ProtectedRoute />} />
+        </Routes>
+      </Router>
     </>
   );
 }
