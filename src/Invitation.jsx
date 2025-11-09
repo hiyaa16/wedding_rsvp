@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 
 const carouselImages = [
-  { src: "/assets/PDF VP_page0001.jpg" },
-  { src: "/assets/PDF VP_page0002.jpg" },
-  { src: "/assets/PDF VP_page0003.jpg" },
-  { src: "/assets/PDF VP_page0004.jpg" },
-  { src: "/assets/PDF VP_page0005.jpg" },
-  { src: "/assets/PDF VP_page0006.jpg" },
-  { src: "/assets/PDF VP_page0007.jpg" },
-  { src: "/assets/PDF VP_page0008.jpg" },
-  { src: "/assets/PDF VP_page0009.jpg" },
-  { src: "/assets/PDF VP_page0010.jpg" },
+  { src: "/assets/0001.jpg" },
+  { src: "/assets/0002.jpg" },
+  { src: "/assets/0003.jpg" },
+  { src: "/assets/0004.jpg" },
+  { src: "/assets/0005.jpg" },
+  { src: "/assets/0006.jpg" },
+  { src: "/assets/0007.jpg" },
+  { src: "/assets/0008.jpg" },
+  { src: "/assets/0009.jpg" },
+  { src: "/assets/0010.jpg" },
 ];
 
 function Invitation() {
