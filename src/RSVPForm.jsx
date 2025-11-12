@@ -7,8 +7,6 @@ import Select from "react-select";
 import * as countryCodes from "country-codes-list";
 
 // Generate all country codes automatically
-
-
 const COUNTRY_CODES = Object.entries(
   countryCodes.customList("countryCode", "{countryNameEn} (+{countryCallingCode})")
 ).map(([_, value]) => {
@@ -18,14 +16,12 @@ const COUNTRY_CODES = Object.entries(
   return { code, label: `${name} (${code})` };
 });
 
-
-
 function RSVPForm() {
   const [response, setResponse] = useState("");
   const [countryCode, setCountryCode] = useState("+91");
   const [contact, setContact] = useState("");
   const [contactError, setContactError] = useState("");
-  const [transportMode, setTransportMode] = useState("");
+  const [transportMode, setTransportMode] = useState("airport"); // Default airport
   const [needTransport, setNeedTransport] = useState("");
   const [name, setName] = useState("");
   const [numAdults, setNumAdults] = useState(0);
@@ -46,17 +42,15 @@ function RSVPForm() {
   useEffect(() => {
     const desktopImg = new window.Image();
     desktopImg.src = bgImage;
-
     const handleResize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Dynamic guest name handling
+  // Update guest names array if adults/kids number changes
   useEffect(() => {
     const totalGuests = Number(numAdults) + Number(numKids);
     const updatedNames = [...guestNames];
-
     if (totalGuests > guestNames.length) {
       for (let i = guestNames.length; i < totalGuests; i++) {
         updatedNames.push("");
@@ -83,7 +77,39 @@ function RSVPForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (contactError) return;
+    if (contactError) {
+      alert("Please enter a valid 10-digit contact number.");
+      return;
+    }
+    if (!transportMode) {
+      alert("Please select your mode of transport.");
+      return;
+    }
+    // Transport-specific required validations
+    if (transportMode === "airport") {
+      if (!arrivalFlightNo.trim()) {
+        alert("Arrival Flight No. is required for airport mode.");
+        return;
+      }
+      if (!departureFlightNo.trim()) {
+        alert("Departure Flight No. is required for airport mode.");
+        return;
+      }
+    } else if (transportMode === "railway") {
+      if (!arrivalTrainNo.trim()) {
+        alert("Arrival Train No. is required for railway mode.");
+        return;
+      }
+      if (!departureTrainNo.trim()) {
+        alert("Departure Train No. is required for railway mode.");
+        return;
+      }
+    } else if (transportMode === "local") {
+      if (!localAddress.trim()) {
+        alert("Local address is required for local mode.");
+        return;
+      }
+    }
 
     const formData = {
       name,
@@ -120,7 +146,7 @@ function RSVPForm() {
       setArrivalTime("");
       setDepartureDate("");
       setDepartureTime("");
-      setTransportMode("");
+      setTransportMode("airport"); // reset to default
       setLocalAddress("");
       setNeedTransport("");
       setArrivalTrainNo("");
@@ -158,7 +184,6 @@ function RSVPForm() {
       }}
     >
       <div className="absolute inset-0 bg-black opacity-20 rounded-t-full"></div>
-
       <div className="relative z-10 w-full">
         <h2
           className="text-4xl sm:mb-8 mt-10 font-bold tracking-wide text-white drop-shadow-lg"
@@ -167,12 +192,11 @@ function RSVPForm() {
           RSVP
         </h2>
         <img
-  src="/logo.png"
-  alt="Wedding Logo"
-  className="mx-auto mt-3 h-14 sm:h-16 md:h-20 w-auto"
-  style={{ maxWidth: '90vw' }}
-/>
-
+          src="/logo.png"
+          alt="Wedding Logo"
+          className="mx-auto mt-3 h-14 sm:h-16 md:h-20 w-auto"
+          style={{ maxWidth: "90vw" }}
+        />
 
         {/* Step 1 - Name + Contact */}
         {!response && (
@@ -181,7 +205,6 @@ function RSVPForm() {
               response === "" ? "mt-8" : "mt-4"
             }`}
           >
-            {/* Smaller Name Field */}
             <input
               type="text"
               placeholder="Name"
@@ -191,129 +214,114 @@ function RSVPForm() {
               className="w-full p-3 text-sm rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
             />
 
-            {/* Contact */}
-       <div className="flex w-full items-center space-x-2">
-  <div className="w-full sm:w-40">
-    <Select
-      options={COUNTRY_CODES.map(({ code, label }) => ({
-        value: code,
-        label: label,
-      }))}
-      value={{
-        value: countryCode,
-        label: COUNTRY_CODES.find((c) => c.code === countryCode)?.label,
-      }}
-      onChange={(option) => setCountryCode(option.value)}
-      isSearchable={true}
-      className="font-serif text-sm"
-      styles={{
-        control: (base) => ({
-          ...base,
-          borderRadius: '9999px',
-          backgroundColor: 'rgba(255,255,255,0.9)',
-          borderColor: '#d1d5db',
-          boxShadow: 'none',
-          minHeight: '46px',
-          width: '100%',
-        }),
-        menu: (base) => ({
-          ...base,
-          zIndex: 9999,
-          fontSize: '0.9rem',
-          width: '100%',
-        }),
-        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-      }}
-      menuPortalTarget={document.body} // fixes clipping
-    />
-  </div>
-
-  {/* Contact Number Input */}
-  <input
-    type="text"
-    inputMode="numeric"
-    placeholder="Contact Number"
-    maxLength={10}
-    value={contact}
-    onChange={handleContactChange}
-    required
-    className="w-full sm:flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-  />
-</div>
-
+            <div className="flex w-full items-center space-x-2">
+              <div className="w-full sm:w-40">
+                <Select
+                  options={COUNTRY_CODES.map(({ code, label }) => ({
+                    value: code,
+                    label: label,
+                  }))}
+                  value={{
+                    value: countryCode,
+                    label: COUNTRY_CODES.find((c) => c.code === countryCode)?.label,
+                  }}
+                  onChange={(option) => setCountryCode(option.value)}
+                  isSearchable={true}
+                  className="font-serif text-sm"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      borderRadius: "9999px",
+                      backgroundColor: "rgba(255,255,255,0.9)",
+                      borderColor: "#d1d5db",
+                      boxShadow: "none",
+                      minHeight: "46px",
+                      width: "100%",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      zIndex: 9999,
+                      fontSize: "0.9rem",
+                      width: "100%",
+                    }),
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
+                  menuPortalTarget={document.body}
+                />
+              </div>
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="Contact Number"
+                maxLength={10}
+                value={contact}
+                onChange={handleContactChange}
+                required
+                className="w-full sm:flex-1 p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
 
             {contactError && (
-              <div className="text-red-400 text-left ml-2 text-sm">
-                {contactError}
-              </div>
+              <div className="text-red-400 text-left ml-2 text-sm">{contactError}</div>
             )}
-
-            {/* Accept / Decline buttons */}
             <div className="flex justify-center gap-6 mb-12">
-             <button
-  onClick={() => {
-    if (!name.trim() || !contact.trim() || contactError) {
-      alert("Please enter a valid Name and 10-digit Contact number before accepting.");
-      return;
-    }
-    setResponse("yes");
-  }}
-  className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
-  response === "yes"
-    ? "bg-white text-black"
-    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-}`}
-
->
-  Accept
-</button>
-
-            <button
-  onClick={async () => {
-    if (!name.trim() || !contact.trim() || contactError) {
-      alert("Please fill in your name and contact number before declining.");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "rsvps"), {
-        name,
-        countryCode,
-        contact,
-        response: "no",
-      });
-      setSubmitted(true);
-    } catch (err) {
-      console.error("Error saving RSVP:", err);
-      alert("Error saving RSVP. Please try again.");
-    }
-  }}
-    className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
-
-    response === "no"
-      ? "bg-white text-black"
-      : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
-  }`}
->
-  Decline
-</button>
-
-
+              <button
+                onClick={() => {
+                  if (!name.trim() || !contact.trim() || contactError) {
+                    alert(
+                      "Please enter a valid Name and 10-digit Contact number before accepting."
+                    );
+                    return;
+                  }
+                  setResponse("yes");
+                }}
+                className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
+                  response === "yes"
+                    ? "bg-white text-black"
+                    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                }`}
+              >
+                Accept
+              </button>
+              <button
+                onClick={async () => {
+                  if (!name.trim() || !contact.trim() || contactError) {
+                    alert(
+                      "Please fill in your name and contact number before declining."
+                    );
+                    return;
+                  }
+                  try {
+                    await addDoc(collection(db, "rsvps"), {
+                      name,
+                      countryCode,
+                      contact,
+                      response: "no",
+                    });
+                    setSubmitted(true);
+                  } catch (err) {
+                    console.error("Error saving RSVP:", err);
+                    alert("Error saving RSVP. Please try again.");
+                  }
+                }}
+                className={`px-6 py-2 sm:px-8 sm:py-2 rounded-xl transition font-serif text-base shadow mt-8 sm:mt-20 ${
+                  response === "no"
+                    ? "bg-white text-black"
+                    : "bg-transparent text-white border border-white hover:bg-white hover:text-black"
+                }`}
+              >
+                Decline
+              </button>
             </div>
           </div>
         )}
 
-
-
-
         {/* Step 2: Show full form only if Accept */}
         {response === "yes" && (
-  <form
-    className="w-full space-y-6 mt-20 sm:mt-20 transition-all duration-500 ease-in-out"
-    onSubmit={handleSubmit}
-  >
-
-            {/* Everything below remains your original YES flow untouched */}
+          <form
+            className="w-full space-y-6 mt-20 sm:mt-20 transition-all duration-500 ease-in-out"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               placeholder="Name"
@@ -321,7 +329,6 @@ function RSVPForm() {
               readOnly
               className="w-full p-3 rounded-full font-serif bg-gray-200 shadow border border-gray-300"
             />
-            {/* Contact */}
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center">
               <select
                 className="w-full sm:w-auto p-3 rounded-full sm:rounded-l-full sm:rounded-r-none font-serif bg-gray-200 shadow border sm:border-r-0 border-gray-300"
@@ -337,16 +344,12 @@ function RSVPForm() {
                 className="flex-1 w-full p-3 rounded-full sm:rounded-r-full sm:rounded-l-none font-serif bg-gray-200 shadow border border-gray-300"
               />
             </div>
-
-            {/* Guests */}
             <div className="text-left font-serif text-white text-sm font-semibold">
               Number of Guests
             </div>
             <div className="flex gap-4">
               <div className="flex flex-col w-1/2">
-                <label className="text-xs text-white font-serif mb-1">
-                  Adults
-                </label>
+                <label className="text-xs text-white font-serif mb-1">Adults</label>
                 <input
                   type="number"
                   min="0"
@@ -357,9 +360,7 @@ function RSVPForm() {
                 />
               </div>
               <div className="flex flex-col w-1/2">
-                <label className="text-xs text-white font-serif mb-1">
-                  Kids
-                </label>
+                <label className="text-xs text-white font-serif mb-1">Kids</label>
                 <input
                   type="number"
                   min="0"
@@ -371,7 +372,6 @@ function RSVPForm() {
               </div>
             </div>
 
-            {/* Guest names */}
             {guestNames.length > 0 && (
               <div className="space-y-3 mt-3">
                 {guestNames.map((guest, i) => {
@@ -385,9 +385,7 @@ function RSVPForm() {
                       type="text"
                       placeholder={label}
                       value={guest}
-                      onChange={(e) =>
-                        handleGuestNameChange(i, e.target.value)
-                      }
+                      onChange={(e) => handleGuestNameChange(i, e.target.value)}
                       className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
                       required
                     />
@@ -397,72 +395,65 @@ function RSVPForm() {
             )}
 
             {/* Arrival */}
-         
-
-{/* --- Arrival Date/Time --- */}
-<div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-  Enter arrival date and time in Jodhpur
-</div>
-<div className="flex gap-4 flex-col sm:flex-row">
-  <select
-    value={arrivalDate}
-    onChange={e => setArrivalDate(e.target.value)}
-    required
-    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-  >
-    <option value="">Select Date</option>
-    <option value="2026-02-20">20 Feb 2026</option>
-    <option value="2026-02-21">21 Feb 2026</option>
-  </select>
-  <input
-    type="time"
-    value={arrivalTime}
-    onChange={e => setArrivalTime(e.target.value)}
-    required
-    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-  />
-</div>
-
-{/* --- Departure Date/Time --- */}
-<div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-  Enter departure date and time from Jodhpur
-</div>
-<div className="flex gap-4 flex-col sm:flex-row">
-  <select
-    value={departureDate}
-    onChange={e => setDepartureDate(e.target.value)}
-    required
-    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-  >
-    <option value="">Select Date</option>
-    <option value="2026-02-21">21 Feb 2026</option>
-    <option value="2026-02-22">22 Feb 2026</option>
-  </select>
-  <input
-    type="time"
-    value={departureTime}
-    onChange={e => setDepartureTime(e.target.value)}
-    required
-    className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
-  />
-</div>
-
+            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+              Enter arrival date and time in Jodhpur
+            </div>
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <select
+                value={arrivalDate}
+                onChange={(e) => setArrivalDate(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              >
+                <option value="">Select Date</option>
+                <option value="2026-02-20">20 Feb 2026</option>
+                <option value="2026-02-21">21 Feb 2026</option>
+              </select>
+              <input
+                type="time"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
+            <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
+              Enter departure date and time from Jodhpur
+            </div>
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <select
+                value={departureDate}
+                onChange={(e) => setDepartureDate(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              >
+                <option value="">Select Date</option>
+                <option value="2026-02-21">21 Feb 2026</option>
+                <option value="2026-02-22">22 Feb 2026</option>
+              </select>
+              <input
+                type="time"
+                value={departureTime}
+                onChange={(e) => setDepartureTime(e.target.value)}
+                required
+                className="flex-1 w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
 
             {/* Transport */}
             <div className="text-left pl-1 font-serif text-white text-sm font-semibold">
-  Mode of Transportation
-</div>
+              Mode of Transportation
+            </div>
             <select
-  className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 text-gray-500 focus:text-black focus:outline-none focus:border-black"
-  value={transportMode}
-  onChange={(e) => setTransportMode(e.target.value)}
-  required
->
-  <option value="airport">Airport</option>
-  <option value="railway">Railway Station</option>
-  <option value="local">Local</option>
-</select>
-
+              className="w-full p-3 rounded-full font-serif bg-white bg-opacity-90 shadow border border-gray-300 text-gray-500 focus:text-black focus:outline-none focus:border-black"
+              value={transportMode}
+              onChange={(e) => setTransportMode(e.target.value)}
+              required
+            >
+              <option value="airport">Airport</option>
+              <option value="railway">Railway Station</option>
+              <option value="local">Local</option>
+            </select>
 
             {transportMode === "railway" && (
               <>
@@ -541,11 +532,10 @@ function RSVPForm() {
                 <span>No</span>
               </label>
             </div>
-
             <button
               type="submit"
               disabled={!!contactError}
-              className="w-40   mt-4 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50"
+              className="w-40   mt-4 py-3 rounded-full bg-black text-white font-serif text-lg transition hover:bg-gray-300 disabled:opacity-50"
             >
               Submit
             </button>
